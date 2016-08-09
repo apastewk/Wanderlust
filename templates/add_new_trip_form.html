@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}My Trips{% endblock %}
+
+{% block body %}
+
+    <h1>Add a Trip</h1>
+    <br>
+    <form action="/my_trips" method="POST" role="form">
+        <div class="form-group">
+            <label for="field-destination">Destination*: </label>
+            <input type="text" name="destination" placeholder="Enter your destination" id-="field-destination">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="field-tripname">Trip Name*: </label>
+            <input type="text" name="tripname" placeholder="Enter your trip name" id-="field-tripname">
+        </div>
+        <br>
+        <div class="form-group">
+            Dates*:
+            <label for="field-startdate"></label>
+            <input type="text" name="startdate" placeholder="Start" id-="field-startdate">
+            <label for="field-enddate"></label>
+            <input type="text" name="enddate" placeholder="End" id="field-enddate">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="field-optionalnotes">Notes (optional): </label>
+            <input type="text" name="notes" id-="field-optionalnotes">    
+        </div>
+        <br>
+        <div class="form-group">
+            <input type="submit" value="Add Trip">
+        </div>
+    </form>
+
+{% endblock %}

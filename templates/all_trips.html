@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}My Trips{% endblock %}
+
+{% block body %}
+
+    <h1>My Trips</h1>
+    <a href="/add_new_trip">Create new trip</a>
+    <br>
+    <br>
+
+    <h3><a href=="/my_trips/<trip_id>">{{ trip_name }} &nbsp; {{ start_date }} - {{ end_date }} &nbsp; {{ notes }}</a></h3>
+
+{% endblock %}
