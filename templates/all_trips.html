@@ -7,7 +7,10 @@
     <a href="/add_new_trip">Create new trip</a>
     <br>
     <br>
+    {% for trip in trips %}
 
-    <h3><a href=="/my_trips/<trip_id>">{{ trip_name }} &nbsp; {{ start_date }} - {{ end_date }} &nbsp; {{ notes }}</a></h3>
+        <h3><a href="/my_trips/{{ trip[4] }}">{{ trip[0] }} &nbsp;&nbsp; {{ trip[1] }} - {{ trip[2] }} &nbsp; {{ trip[3] }}</a></h3>
+
+    {% endfor %} 
 
 {% endblock %}

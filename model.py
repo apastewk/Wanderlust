@@ -2,6 +2,9 @@
 
 import os
 from flask_sqlalchemy import SQLAlchemy
+from flask import request
+
+import datetime
 
 
 # This is the connection to the PostreSQL database.  Getting the through the
@@ -78,11 +81,11 @@ class Flight(db.Model):
     arrives_at = db.Column(db.DateTime, nullable=True)
     arrives_to = db.Column(db.String(20), nullable=True)
     airpt_code_arr = db.Column(db.String(3), nullable=True)
-    duration = db.Column(db.DateTime, nullable=True)
+    duration = db.Column(db.Integer, nullable=True)
     rewards_num = db.Column(db.String(20), nullable=True)
 
     trip = db.relationship("Trip")
-    passenger = db.relationship("Passenger") 
+    passenger = db.relationship("Passenger")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -170,7 +173,9 @@ class PublicTransportation(db.Model):
     trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
     confirmation_num = db.Column(db.String(20), nullable=True)
     vendor_name = db.Column(db.String(20), nullable=True)
+    departs_from = db.Column(db.String(64), nullable=True)
     departs_at = db.Column(db.DateTime, nullable=True)
+    arrives_to = db.Column(db.String(64), nullable=True)
     arrives_at = db.Column(db.DateTime, nullable=True)
     num_of_passengers = db.Column(db.Integer, nullable=True)
 
@@ -227,6 +232,34 @@ class Meeting(db.Model):
 ################################################################################
 
 # Helepr Functions
+
+def make_start_datetime_obj():
+    """Combines start_date and start_time form inputs into a datetime object."""
+
+    s_date = request.form.get("start-date", None)
+    s_time = request.form.get("start-time", None)
+    s_date = str(s_date)
+    s_time = str(s_time)
+
+    conv_date = datetime.datetime.strptime(s_date, "%Y-%M-%d")
+    conv_time = datetime.datetime.strptime(s_time, "%H:%M").time()
+ 
+    return datetime.datetime.combine(conv_date, conv_time)
+
+
+def make_end_datetime_obj():
+    """Combines end_date and end_time form inputs into a datetime object."""
+
+    e_date = request.form.get("end-date", None)
+    e_time = request.form.get("end-time", None)
+    e_date = str(e_date)
+    e_time = str(e_time)
+
+    conv_date = datetime.datetime.strptime(e_date, "%Y-%M-%d")
+    conv_time = datetime.datetime.strptime(e_time, "%H:%M").time()
+
+    return datetime.datetime.combine(conv_date, conv_time)
+
 
 def connect_to_db(app):
     """Connect the database to Flask app."""
