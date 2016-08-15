@@ -1,5 +1,7 @@
 """Models for my database to store a users trip confirmation details."""
 
+# This Python file uses the following encoding: utf-8
+# -*- coding: utf-8 -*-
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import request
@@ -75,10 +77,10 @@ class Flight(db.Model):
     confirmation_num = db.Column(db.String(20), nullable=True)
     airline = db.Column(db.String(20), nullable=True)
     flight_num = db.Column(db.String(10), nullable=True)
-    departs_at = db.Column(db.DateTime, nullable=True)
+    starts_at = db.Column(db.DateTime, nullable=True)
     departs_from = db.Column(db.String(20), nullable=True)
     airpt_code_dep = db.Column(db.String(3), nullable=True)
-    arrives_at = db.Column(db.DateTime, nullable=True)
+    ends_at = db.Column(db.DateTime, nullable=True)
     arrives_to = db.Column(db.String(20), nullable=True)
     airpt_code_arr = db.Column(db.String(3), nullable=True)
     duration = db.Column(db.Integer, nullable=True)
@@ -123,8 +125,8 @@ class Hotel(db.Model):
     confirmation_num = db.Column(db.String(20), nullable=True)
     hotel_name = db.Column(db.String(40), nullable=True)
     address = db.Column(db.String(100), nullable=True)
-    arrives_at = db.Column(db.DateTime, nullable=True)
-    departs_at = db.Column(db.DateTime, nullable=True)
+    starts_at = db.Column(db.DateTime, nullable=True)
+    ends_at = db.Column(db.DateTime, nullable=True)
     num_of_nights = db.Column(db.Integer, nullable=True)
     num_of_rooms = db.Column(db.Integer, nullable=True)
     rewards_num = db.Column(db.String(20), nullable=True)
@@ -148,10 +150,10 @@ class CarRental(db.Model):
     trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
     confirmation_num = db.Column(db.String(20), nullable=True)
     agency_name = db.Column(db.String(20), nullable=True)
-    pick_up_at = db.Column(db.DateTime, nullable=True)
-    pick_up_from = db.Column(db.String(100), nullable=True)
-    drop_off_at = db.Column(db.DateTime, nullable=True)
-    drop_off_to = db.Column(db.String(100), nullable=True)
+    starts_at = db.Column(db.DateTime, nullable=True)
+    pickup_from = db.Column(db.String(100), nullable=True)
+    ends_at = db.Column(db.DateTime, nullable=True)
+    dropoff_to = db.Column(db.String(100), nullable=True)
     drivers_name = db.Column(db.String(40), nullable=True)
     car_type = db.Column(db.String(20), nullable=True)
 
@@ -160,8 +162,8 @@ class CarRental(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Car rental rental_id: {}, agency_name: {}, pick_up_at: {}, drop_off_at: {}>".format(
-            self.rental_id, self.agency_name, self.pick_up_at, self.drop_off_at)
+        return "<Car rental rental_id: {}, agency_name: {}, starts_at: {}, ends_at: {}>".format(
+            self.rental_id, self.agency_name, self.starts_at, self.ends_at)
 
 
 class PublicTransportation(db.Model):
@@ -174,9 +176,9 @@ class PublicTransportation(db.Model):
     confirmation_num = db.Column(db.String(20), nullable=True)
     vendor_name = db.Column(db.String(20), nullable=True)
     departs_from = db.Column(db.String(64), nullable=True)
-    departs_at = db.Column(db.DateTime, nullable=True)
+    starts_at = db.Column(db.DateTime, nullable=True)
     arrives_to = db.Column(db.String(64), nullable=True)
-    arrives_at = db.Column(db.DateTime, nullable=True)
+    ends_at = db.Column(db.DateTime, nullable=True)
     num_of_passengers = db.Column(db.Integer, nullable=True)
 
     trip = db.relationship("Trip")
@@ -205,8 +207,8 @@ class Event(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Event event_id: {}, trip_id: {}, event_name: {}, starts_at: {}>".format(
-            self.event_id, self.trip_id, self.event_name, self.starts_at)
+        return "<Event event_id: {}, trip_id: {}, confirmation_num: {}, event_name: {}, starts_at: {}, address: {}>".format(
+            self.event_id, self.trip_id, self.confirmation_num, self.event_name, self.starts_at, self.address)
 
 
 class Meeting(db.Model):
@@ -233,21 +235,24 @@ class Meeting(db.Model):
 
 # Helepr Functions
 
-def make_start_datetime_obj():
+def make_start_datetime_obj(start_date):
     """Combines start_date and start_time form inputs into a datetime object."""
 
+    # s_time = 00:00
     s_date = request.form.get("start-date", None)
     s_time = request.form.get("start-time", None)
     s_date = str(s_date)
     s_time = str(s_time)
 
+
     conv_date = datetime.datetime.strptime(s_date, "%Y-%M-%d")
     conv_time = datetime.datetime.strptime(s_time, "%H:%M").time()
- 
+
     return datetime.datetime.combine(conv_date, conv_time)
+   
 
 
-def make_end_datetime_obj():
+def make_end_datetime_obj(end_date):
     """Combines end_date and end_time form inputs into a datetime object."""
 
     e_date = request.form.get("end-date", None)

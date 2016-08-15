@@ -1,5 +1,7 @@
 """User Trips"""
 
+import os
+
 from flask import Flask, render_template, redirect, request, flash, session
 
 from model import User, Trip, Flight, Passenger, Hotel, CarRental
@@ -7,6 +9,7 @@ from model import PublicTransportation, Meeting, Event, connect_to_db, db
 from model import make_start_datetime_obj, make_end_datetime_obj
 
 import datetime
+import psycopg2
 
 app = Flask(__name__)
 
@@ -163,14 +166,59 @@ def add_new_trip():
 def trip_details(trip_id):
     """Lists in chronological order a trips particulars."""
 
+
+
     trip = Trip.query.filter(Trip.trip_id == trip_id).first()
     trip_name = trip.trip_name
-    # trip_list = []
 
-    # #not right, I need it to give me the different flights, hotels, etc.
-    # current_trip = Trip.query.filter(Trip.trip_id == trip_id).first()
+    
+    def get_trip_entities(trip):
+        
+        print [trip.event, trip.car_rental]
+        return [trip.event, trip.car_rental]
 
-    # for item in current_trip:
+    get_trip_entities(trip)
+
+    
+
+    # hotel_details = Hotel.query.filter(Hotel.trip_id == trip_id).all()
+    # car_rental_details = CarRental.query.filter(CarRental.trip_id == trip_id).all()
+    # public_transportation_details = PublicTransportation.query.filter(PublicTransportation.trip_id == trip_id).all()
+    # event_details = Event.query.filter(Event.trip_id == trip_id).all()
+    # meeting_details = Meeting.query.filter(Meeting.trip_id == trip_id).all()
+
+    # all_details = [flight_details, hotel_details, car_rental_details, public_transportation_details, event_details, meeting_details]
+
+    # def time():
+    #     start_date = trip.starts_at.strftime("%a, %b %d")
+    #     start_time = trip.starts_at.strftime("%H:%M")
+    #     return start_date, start_time
+       
+    #  def date():
+    #     end_date = trip.ends_at.strftime("%a, %b %d")
+    #     end_time = trip.ends_at.strftime("%H:%M")
+    #     return end_date, end_time
+   
+    # trip_times = []
+
+    # for flight in flight_details:
+    #     time()
+    #     date()
+
+
+
+
+    # for trip_details in all_details:
+    #     # print "trip_details: ", trip_details
+    #     for trip in trip_details:
+    #         # print "trip: ", trip
+    #         start_date = trip.starts_at.strftime("%a, %b %d")
+    #         print start_date
+    #         start_time = trip.starts_at.strftime("%H:%M")
+    #         if hasattr(trip, "ends_at"):
+    #             end_date = trip.ends_at.strftime("%a, %b %d")
+    #             end_time = trip.ends_at.strftime("%H:%M")
+            # trip_times.append(start_date, start_time)
 
 
     return render_template("trip_details.html",
@@ -197,29 +245,41 @@ def add_trip_details(trip_id):
 
     if form_type == "event":
         instance = Event()
-        make_start_datetime_obj()
     elif form_type == "flight":
         instance = Flight()
-        make_start_datetime_obj()
-        make_end_datetime_obj()
     elif form_type == "hotel":
         instance = Hotel()
-        make_start_datetime_obj()
-        make_end_datetime_obj()
     elif form_type == "car-rental":
         instance = CarRental()
-        make_start_datetime_obj()
-        make_end_datetime_obj()
     elif form_type == "public-transportation":
         instance = PublicTransportation()
-        make_start_datetime_obj()
-        make_end_datetime_obj()
     elif form_type == "meeting":
         instance = Meeting()
-        make_start_datetime_obj()
     
     for key in request.form:
-        instance.key = request.form[key]
+        if key == "start-date":
+            print key
+            datetime = make_start_datetime_obj(request.form[key])
+            instance.starts_at = datetime
+            print instance
+        elif key == "start-time":
+            continue
+        elif key == "end-date":
+            datetime = make_end_datetime_obj(request.form[key])
+            instance.ends_at = datetime
+        elif key == "end-time":
+            continue
+        else:
+            print key
+            instance.key = request.form[key]
+            print instance.key
+            print instance 
+
+
+    instance.trip_id = trip_id
+
+    db.session.add(instance)
+    db.session.commit()
 
 
     return redirect("/my_trips/" + trip_id)
