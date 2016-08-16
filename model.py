@@ -1,7 +1,5 @@
 """Models for my database to store a users trip confirmation details."""
 
-# This Python file uses the following encoding: utf-8
-# -*- coding: utf-8 -*-
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import request

@@ -8,8 +8,10 @@ from model import User, Trip, Flight, Passenger, Hotel, CarRental
 from model import PublicTransportation, Meeting, Event, connect_to_db, db
 from model import make_start_datetime_obj, make_end_datetime_obj
 
+from operator import attrgetter
 import datetime
 import psycopg2
+
 
 app = Flask(__name__)
 
@@ -174,21 +176,26 @@ def trip_details(trip_id):
     
     def get_trip_entities(trip):
         
-        print [trip.event, trip.car_rental]
-        return [trip.event, trip.car_rental]
+        results = trip.event + trip.car_rental
+        sorted_results = sorted(results, key=attrgetter('starts_at'))
+        return sorted_results 
 
-    get_trip_entities(trip)
+    trip_entities = get_trip_entities(trip)
+
+    trip_entities = [entity.__dict__ for entity in trip_entities]
+    print trip_entities
+
+    for entity in trip_entities:
+        print entity
+        if entity[] not in entity.keys():
+            entity.key.pop()
+        else:
+            continue
+
+
+
 
     
-
-    # hotel_details = Hotel.query.filter(Hotel.trip_id == trip_id).all()
-    # car_rental_details = CarRental.query.filter(CarRental.trip_id == trip_id).all()
-    # public_transportation_details = PublicTransportation.query.filter(PublicTransportation.trip_id == trip_id).all()
-    # event_details = Event.query.filter(Event.trip_id == trip_id).all()
-    # meeting_details = Meeting.query.filter(Meeting.trip_id == trip_id).all()
-
-    # all_details = [flight_details, hotel_details, car_rental_details, public_transportation_details, event_details, meeting_details]
-
     # def time():
     #     start_date = trip.starts_at.strftime("%a, %b %d")
     #     start_time = trip.starts_at.strftime("%H:%M")
@@ -223,7 +230,8 @@ def trip_details(trip_id):
 
     return render_template("trip_details.html",
                             trip_id=trip_id,
-                            trip_name=trip_name)
+                            trip_name=trip_name,
+                            trip_entities=trip_entities)
 
 
 @app.route("/add_trip_details/<trip_id>")
@@ -270,10 +278,7 @@ def add_trip_details(trip_id):
         elif key == "end-time":
             continue
         else:
-            print key
-            instance.key = request.form[key]
-            print instance.key
-            print instance 
+            setattr(instance, key, request.form[key])
 
 
     instance.trip_id = trip_id
