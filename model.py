@@ -4,7 +4,8 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import request
 
-import datetime
+from operator import attrgetter
+from datetime import datetime, timedelta
 
 
 # This is the connection to the PostreSQL database.  Getting the through the
@@ -81,7 +82,7 @@ class Flight(db.Model):
     ends_at = db.Column(db.DateTime, nullable=True)
     arrives_to = db.Column(db.String(20), nullable=True)
     airpt_code_arr = db.Column(db.String(3), nullable=True)
-    duration = db.Column(db.Integer, nullable=True)
+    duration = db.Column(db.Float, nullable=True)
     rewards_num = db.Column(db.String(20), nullable=True)
 
     trip = db.relationship("Trip")
@@ -90,9 +91,9 @@ class Flight(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Flight flight_id: {}, trip_id: {}, departs_from: {}, departs_at: {}, arrives_to: {}, arrives_at: {}".format(
-            self.flight_id, self.trip_id, self.departs_from, self.departs_at,
-            self.arrives_to, self.arrives_at)
+        return "<Flight flight_id: {}, trip_id: {}, departs_from: {}, starts_at: {}, arrives_to: {}, ends_at: {}".format(
+            self.flight_id, self.trip_id, self.departs_from, self.starts_at,
+            self.arrives_to, self.ends_at)
 
 
 class Passenger(db.Model):
@@ -134,9 +135,9 @@ class Hotel(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Hotel hotel_id: {}, trip_id: {}, hotel_name: {}, arrives_at: {}, departs_at: {}>".format(
-            self.hotel_id, self.trip_id, self.hotel_name, self.arrives_at,
-            self.departs_at)
+        return "<Hotel hotel_id: {}, trip_id: {}, hotel_name: {}, ends_at: {}, starts_at: {}>".format(
+            self.hotel_id, self.trip_id, self.hotel_name, self.ends_at,
+            self.starts_at)
 
 
 class CarRental(db.Model):
@@ -184,8 +185,8 @@ class PublicTransportation(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Vendor vendor_id: {}, trip_id: {}, vendor_name: {}, departs_at: {}, arrives_at: {}>".format(
-            self.vendor_id, self.trip_id, self.vendor_name, self.departs_at, self.arrives_at)
+        return "<Vendor vendor_id: {}, trip_id: {}, vendor_name: {}, starts_at: {}, ends_at: {}>".format(
+            self.vendor_id, self.trip_id, self.vendor_name, self.starts_at, self.ends_at)
 
 
 class Event(db.Model):
@@ -233,35 +234,42 @@ class Meeting(db.Model):
 
 # Helepr Functions
 
-def make_start_datetime_obj(start_date):
+def make_start_datetime_obj():
     """Combines start_date and start_time form inputs into a datetime object."""
 
     # s_time = 00:00
     s_date = request.form.get("start-date", None)
     s_time = request.form.get("start-time", None)
-    s_date = str(s_date)
-    s_time = str(s_time)
+
+    conv_date = datetime.strptime(s_date, "%Y-%m-%d").date()
+    conv_time = datetime.strptime(s_time, "%H:%M").time()
+
+    return datetime.combine(conv_date, conv_time)
 
 
-    conv_date = datetime.datetime.strptime(s_date, "%Y-%M-%d")
-    conv_time = datetime.datetime.strptime(s_time, "%H:%M").time()
-
-    return datetime.datetime.combine(conv_date, conv_time)
-   
-
-
-def make_end_datetime_obj(end_date):
+def make_end_datetime_obj():
     """Combines end_date and end_time form inputs into a datetime object."""
 
     e_date = request.form.get("end-date", None)
     e_time = request.form.get("end-time", None)
-    e_date = str(e_date)
-    e_time = str(e_time)
 
-    conv_date = datetime.datetime.strptime(e_date, "%Y-%M-%d")
-    conv_time = datetime.datetime.strptime(e_time, "%H:%M").time()
+    conv_date = datetime.strptime(e_date, "%Y-%m-%d").date()
+    conv_time = datetime.strptime(e_time, "%H:%M").time()
 
-    return datetime.datetime.combine(conv_date, conv_time)
+    return datetime.combine(conv_date, conv_time)
+
+
+def get_trip_entities(trip):
+    """Creates a list on sql objects and sorts them by date"""
+
+    results = trip.flight + trip.hotel + trip.car_rental + trip.public_transportation + trip.event + trip.meeting
+    sorted_results = sorted(results, key=attrgetter('starts_at'))
+    return sorted_results
+
+
+def daterange(start_date, end_date):
+        for n in range(int ((end_date - start_date).days)):
+            yield start_date + timedelta(n)
 
 
 def connect_to_db(app):

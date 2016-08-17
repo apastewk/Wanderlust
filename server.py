@@ -6,10 +6,10 @@ from flask import Flask, render_template, redirect, request, flash, session
 
 from model import User, Trip, Flight, Passenger, Hotel, CarRental
 from model import PublicTransportation, Meeting, Event, connect_to_db, db
-from model import make_start_datetime_obj, make_end_datetime_obj
+from model import make_start_datetime_obj, make_end_datetime_obj, get_trip_entities
+from model import daterange
 
-from operator import attrgetter
-import datetime
+from datetime import datetime, timedelta, date
 import psycopg2
 
 
@@ -110,13 +110,13 @@ def all_trips():
 
     if session['logged_in']:
         current_user = User.query.filter(User.email == session['logged_in']).first()
-        user_id = current_user.user_id
+        session_user_id = current_user.user_id
     else:
         redirect("/login ")
 
     trips_list = []
 
-    all_trips = Trip.query.filter(user_id == User.user_id).order_by(Trip.start_date).all()
+    all_trips = Trip.query.filter(Trip.user_id == session_user_id).order_by(Trip.start_date).all()
 
     for trip in all_trips:
         start_date = trip.start_date.strftime("%a, %b %d, %Y")
@@ -168,70 +168,41 @@ def add_new_trip():
 def trip_details(trip_id):
     """Lists in chronological order a trips particulars."""
 
-
-
     trip = Trip.query.filter(Trip.trip_id == trip_id).first()
     trip_name = trip.trip_name
 
-    
-    def get_trip_entities(trip):
-        
-        results = trip.event + trip.car_rental
-        sorted_results = sorted(results, key=attrgetter('starts_at'))
-        return sorted_results 
+    start_date = trip.start_date
+    end_date = trip.end_date
+
+    daterange(start_date, end_date)
+
+    range_of_dates = []
+
+    for single_date in daterange(start_date, end_date):
+        conv_single_date = single_date.strftime("%a, %b %d, %Y")
+        range_of_dates.append(conv_single_date)
 
     trip_entities = get_trip_entities(trip)
 
     trip_entities = [entity.__dict__ for entity in trip_entities]
-    print trip_entities
 
     for entity in trip_entities:
-        print entity
-        if entity[] not in entity.keys():
-            entity.key.pop()
+        if "_sa_instance_state" in entity:
+            del entity["_sa_instance_state"]
+        if "starts_at" in entity:
+            entity["start_time"] = entity["starts_at"].strftime("%H:%M")
+            entity["starts_at"] = entity["starts_at"].strftime("%a, %b %d, %Y")
+        if "ends_at" in entity:
+            entity["end_time"] = entity["ends_at"].strftime("%H:%M")
+            entity["ends_at"] = entity["ends_at"].strftime("%a, %b %d, %Y")
         else:
             continue
-
-
-
-
-    
-    # def time():
-    #     start_date = trip.starts_at.strftime("%a, %b %d")
-    #     start_time = trip.starts_at.strftime("%H:%M")
-    #     return start_date, start_time
-       
-    #  def date():
-    #     end_date = trip.ends_at.strftime("%a, %b %d")
-    #     end_time = trip.ends_at.strftime("%H:%M")
-    #     return end_date, end_time
-   
-    # trip_times = []
-
-    # for flight in flight_details:
-    #     time()
-    #     date()
-
-
-
-
-    # for trip_details in all_details:
-    #     # print "trip_details: ", trip_details
-    #     for trip in trip_details:
-    #         # print "trip: ", trip
-    #         start_date = trip.starts_at.strftime("%a, %b %d")
-    #         print start_date
-    #         start_time = trip.starts_at.strftime("%H:%M")
-    #         if hasattr(trip, "ends_at"):
-    #             end_date = trip.ends_at.strftime("%a, %b %d")
-    #             end_time = trip.ends_at.strftime("%H:%M")
-            # trip_times.append(start_date, start_time)
-
 
     return render_template("trip_details.html",
                             trip_id=trip_id,
                             trip_name=trip_name,
-                            trip_entities=trip_entities)
+                            trip_entities=trip_entities,
+                            range_of_dates=range_of_dates)
 
 
 @app.route("/add_trip_details/<trip_id>")
@@ -241,8 +212,12 @@ def add_trip_details_form(trip_id):
     add.(TERRRIBLE ENGLISH)
     """
 
+    trip = Trip.query.filter(Trip.trip_id == trip_id).first()
+    trip_name = trip.trip_name
+
     return render_template("trip_details_form.html",
-                            trip_id=trip_id)
+                            trip_id=trip_id,
+                            trip_name=trip_name)
 
 
 @app.route("/my_trips/<trip_id>", methods=["POST"])
@@ -250,6 +225,7 @@ def add_trip_details(trip_id):
     """Adds the newly submitted confirmation trip details to the db and to the trip."""
 
     form_type = request.form.get("ftype", None)
+    start_date = request.form.get("start-date", None)
 
     if form_type == "event":
         instance = Event()
@@ -266,14 +242,12 @@ def add_trip_details(trip_id):
     
     for key in request.form:
         if key == "start-date":
-            print key
-            datetime = make_start_datetime_obj(request.form[key])
+            datetime = make_start_datetime_obj()
             instance.starts_at = datetime
-            print instance
         elif key == "start-time":
             continue
         elif key == "end-date":
-            datetime = make_end_datetime_obj(request.form[key])
+            datetime = make_end_datetime_obj()
             instance.ends_at = datetime
         elif key == "end-time":
             continue

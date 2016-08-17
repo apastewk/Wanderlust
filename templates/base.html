@@ -5,6 +5,9 @@
     <script src="http://code.jquery.com/jquery.js"></script>
 </head>
 <body>
+    <div>
+        <a href="/logout">Logout</a>
+    </div>
     <ul>
         {% for message in get_flashed_messages() %}
             <li>{{ message }}</li>
