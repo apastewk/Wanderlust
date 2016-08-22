@@ -2,7 +2,6 @@
 
 import os
 from flask_sqlalchemy import SQLAlchemy
-from flask import request
 
 from operator import attrgetter
 from datetime import datetime, timedelta
@@ -82,7 +81,7 @@ class Flight(db.Model):
     ends_at = db.Column(db.DateTime, nullable=True)
     arrives_to = db.Column(db.String(20), nullable=True)
     airpt_code_arr = db.Column(db.String(3), nullable=True)
-    duration = db.Column(db.Float, nullable=True)
+    duration = db.Column(db.Float(2), nullable=True)
     rewards_num = db.Column(db.String(20), nullable=True)
 
     trip = db.relationship("Trip")
@@ -126,9 +125,7 @@ class Hotel(db.Model):
     address = db.Column(db.String(100), nullable=True)
     starts_at = db.Column(db.DateTime, nullable=True)
     ends_at = db.Column(db.DateTime, nullable=True)
-    num_of_nights = db.Column(db.Integer, nullable=True)
-    num_of_rooms = db.Column(db.Integer, nullable=True)
-    rewards_num = db.Column(db.String(20), nullable=True)
+    room_type = db.Column(db.String(20), nullable=True)
 
     trip = db.relationship("Trip")
 
@@ -155,6 +152,7 @@ class CarRental(db.Model):
     dropoff_to = db.Column(db.String(100), nullable=True)
     drivers_name = db.Column(db.String(40), nullable=True)
     car_type = db.Column(db.String(20), nullable=True)
+    rewards_num = db.Column(db.String(20), nullable=True)
 
     trip = db.relationship("Trip")
 
@@ -178,7 +176,9 @@ class PublicTransportation(db.Model):
     starts_at = db.Column(db.DateTime, nullable=True)
     arrives_to = db.Column(db.String(64), nullable=True)
     ends_at = db.Column(db.DateTime, nullable=True)
-    num_of_passengers = db.Column(db.Integer, nullable=True)
+    travelers_name = db.Column(db.String(40), nullable=True)
+    duration = db.Column(db.Integer, nullable=True)
+    transport_num = db.Column(db.String(20), nullable=True)
 
     trip = db.relationship("Trip")
 
@@ -233,43 +233,6 @@ class Meeting(db.Model):
 ################################################################################
 
 # Helepr Functions
-
-def make_start_datetime_obj():
-    """Combines start_date and start_time form inputs into a datetime object."""
-
-    # s_time = 00:00
-    s_date = request.form.get("start-date", None)
-    s_time = request.form.get("start-time", None)
-
-    conv_date = datetime.strptime(s_date, "%Y-%m-%d").date()
-    conv_time = datetime.strptime(s_time, "%H:%M").time()
-
-    return datetime.combine(conv_date, conv_time)
-
-
-def make_end_datetime_obj():
-    """Combines end_date and end_time form inputs into a datetime object."""
-
-    e_date = request.form.get("end-date", None)
-    e_time = request.form.get("end-time", None)
-
-    conv_date = datetime.strptime(e_date, "%Y-%m-%d").date()
-    conv_time = datetime.strptime(e_time, "%H:%M").time()
-
-    return datetime.combine(conv_date, conv_time)
-
-
-def get_trip_entities(trip):
-    """Creates a list on sql objects and sorts them by date"""
-
-    results = trip.flight + trip.hotel + trip.car_rental + trip.public_transportation + trip.event + trip.meeting
-    sorted_results = sorted(results, key=attrgetter('starts_at'))
-    return sorted_results
-
-
-def daterange(start_date, end_date):
-        for n in range(int ((end_date - start_date).days)):
-            yield start_date + timedelta(n)
 
 
 def connect_to_db(app):

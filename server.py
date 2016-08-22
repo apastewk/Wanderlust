@@ -6,8 +6,8 @@ from flask import Flask, render_template, redirect, request, flash, session
 
 from model import User, Trip, Flight, Passenger, Hotel, CarRental
 from model import PublicTransportation, Meeting, Event, connect_to_db, db
-from model import make_start_datetime_obj, make_end_datetime_obj, get_trip_entities
-from model import daterange
+from utility import make_start_datetime_obj, make_end_datetime_obj, get_trip_entities
+from utility import daterange
 
 from datetime import datetime, timedelta, date
 import psycopg2
@@ -55,7 +55,6 @@ def sign_up():
                         firstname=firstname,
                         lastname=lastname,
                         password=password)
-
         db.session.add(new_user)
         db.session.commit()
         flash("You are now registered! Please login.")
@@ -221,48 +220,56 @@ def add_trip_details_form(trip_id):
 
 
 @app.route("/my_trips/<trip_id>", methods=["POST"])
-def add_trip_details(trip_id):
-    """Adds the newly submitted confirmation trip details to the db and to the trip."""
+def add_form_trip_details(trip_id):
+    """Adds the newly submitted confirmation trip details to the database."""
 
     form_type = request.form.get("ftype", None)
-    start_date = request.form.get("start-date", None)
 
-    if form_type == "event":
-        instance = Event()
-    elif form_type == "flight":
-        instance = Flight()
-    elif form_type == "hotel":
-        instance = Hotel()
-    elif form_type == "car-rental":
-        instance = CarRental()
-    elif form_type == "public-transportation":
-        instance = PublicTransportation()
-    elif form_type == "meeting":
-        instance = Meeting()
+    create_item(form_type, request.form, trip_id)
     
-    for key in request.form:
-        if key == "start-date":
-            datetime = make_start_datetime_obj()
-            instance.starts_at = datetime
-        elif key == "start-time":
-            continue
-        elif key == "end-date":
-            datetime = make_end_datetime_obj()
-            instance.ends_at = datetime
-        elif key == "end-time":
-            continue
-        else:
-            setattr(instance, key, request.form[key])
+    # router_map = {"event": Event,
+    #               "flight": Flight,
+    #               "hotel": Hotel,
+    #               "car-rental": CarRental,
+    #               "public-transportation": PublicTransportation,
+    #               "meeting": Meeting}
+
+    # if form_type in router_map:
+    #     instance = router_map[form_type]()
+  
+    # for key in request.form:
+    #     if request.form[key] != "":
+    #         if key == "start-date":
+    #             datetime = make_start_datetime_obj()
+    #             instance.starts_at = datetime
+    #         elif key == "start-time":
+    #             continue
+    #         elif key == "end-date":
+    #             datetime = make_end_datetime_obj()
+    #             instance.ends_at = datetime
+    #         elif key == "end-time":
+    #             continue
+    #         else:
+    #             print request.form[key]
+    #             setattr(instance, key, request.form[key])
 
 
-    instance.trip_id = trip_id
+    # instance.trip_id = trip_id
 
-    db.session.add(instance)
-    db.session.commit()
+    # db.session.add(instance)
+    # db.session.commit()
 
 
     return redirect("/my_trips/" + trip_id)
 
+
+@app.route("/my_trips/<trip_id>")
+def add_email_trip_details(trip_id):
+    """Adds the parsed email trip details to the database.""" 
+
+    if 
+
+    create_item(email_type, , trip_id)
 
 if __name__ == "__main__":
 

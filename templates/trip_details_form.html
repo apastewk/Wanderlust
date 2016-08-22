@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% block title %}Add a Trips{% endblock %}
+
+   
+
+{% block body %}
+
+    <h1>{{ trip_name }}</h1>
+
+    <a href="/my_trips">Return to My Trips</a>
+    <br>
+    <br>
+    <a href="/my_trips/{{ trip_id }}">Return to Trip Details for my trip to {{ trip_name }}</a>
+    <br>
+    <br>
+    <br>
+    <form action="/my_trips" method="POST" role="form">
+        <div class="form-group">
+            <h3>Please choose an event:
+            <label for="field-trip-confirmation"></label>
+            <select name="trip=confirmation" id="field-trip-confirmation">
+                <option value="choose-a-confirmation">Choose a Confirmation</option>
+                <option value="flight" id="flight-button">Flight</option>
+                <option value="hotel" id="hotel-button">Hotel</option>
+                <option value="car-rental" id="car-rental-button">Car Rental</option>
+                <option value="public-transportation" id="public-transportation-button">Public Transportation</option>
+                <option value="event" id="event-button">Event</option>
+                <option value="meeting" id="meeting-button">Meeting</option>
+            </select>
+            </h3>
+        </div>
+    </form>
+    <br>
+    <div class="form-event" id="flight" hidden>
+        <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
+            <div class="form-group">
+                <label for="field-airline">Airline: </label>
+                <input type="text" name="airline" placeholder="Enter the airlines" id="field-airline">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-number">Flight Number: </label>
+                <input type="text" name="flight_num" placeholder="Enter the flight #" id="field-flight-number">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-confirmation-number">Confirmation Number: </label>
+                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-flight-confirmation-number">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-departure-city">Departure City: </label>
+                <input type="text" name="departs_from" placeholder="Enter the departure city" id="field-flight-departure-city">  
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-departure-airport-code">Departure City Airport Code: </label>
+                <input type="text" name="airpt_code_dep" placeholder="Enter the airport code" id="field-departure-airport-code">  
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-departure-date">Departure Date: </label>
+                <input type="date" name="start-date" placeholder="Enter the departure date" id="field-flight-depature-date" required>  
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-departure-time">Departure Time: </label>
+                <input type="time" name="start-time" placeholder="Enter the departure time" value="00:00" id="field-flight-departure-time">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-arrival-city">Arrival City: </label>
+                <input type="text" name="arrives_to" placeholder="Enter the arrival city" id="field-flight-arrival-city">   
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-arrival-airport-code">Arrival City Airport Code: </label>
+                <input type="text" name="airpt_code_arr" placeholder="Enter the airport code" id="field-arrival-airport-code">  
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-arrival-date">Arrival Date: </label>
+                <input type="date" name="end-date" placeholder="Enter the arrival date" id="field-flight-arrival-date" required>  
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-arrival-time">Arrival Time: </label>
+                <input type="time" name="end-time" placeholder="Enter the arrival time" value="00:00" id="field-flight-arrival-time">   
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-duration">Duration of Flight: </label>
+                <input type="text" name="flight-duration" placeholder="Enter the duration" id="field-flight-duration">  
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-flight-rewards-number">Rewards Number: </label>
+                <input type="text" name="rewards_num" placeholder="Enter your rewards #" id="field-flight-rewards-number">
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="submit" value="Add Trip Details">
+                <input type="hidden" value="flight" name="ftype">
+            </div>
+        </form>
+    </div>
+    <div class="form-event" id="hotel" hidden>
+        <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
+            <div class="form-group">
+                <label for="field-hotel-name">Hotel Name: </label>
+                <input type="text" name="hotel_name" placeholder="Enter the hotel-name" id="field-hotel-name">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-hotel-address">Hotel Address: </label>
+                <input type="text" name="address" placeholder="Enter the address" id="field-hotel-address">  
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-hotel-confirmation-number">Confirmation Number: </label>
+                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-hotel-confirmation-number">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-hotel-arrival-date">Arrival Date: </label>
+                <input type="date" name="start-date" placeholder="Enter the arrival date" id="field-arrival-date" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-hotel-arrival-time">Arrival Time: </label>
+                <input type="time" name="start-time" placeholder="Enter the arrival time" value="00:00" id="field-arrival-time">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-hotel-departure-date">Departure Date: </label>
+                <input type="date" name="end-date" placeholder="Enter the departure date" id="field-hotel-departure-date" required>  
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-hotel-departure-time">Departure Time: </label>
+                <input type="time" name="end-time" placeholder="Enter the departure time" value="00:00" id="field-departure-time">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-room-type">Type of Room: </label>
+                <input type="text" name="room_type" placeholder="Enter the type of room" id="field-room-type">  
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="submit" value="Add Trip Details">
+                <input type="hidden" value="hotel" name="ftype">
+            </div>
+        </form>
+    </div>
+    <div class="form-event" id="car-rental" hidden>
+        <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
+            <div class="form-group">
+                <label for="field-agency-name">Car Agency Name: </label>
+                <input type="text" name="agency_name" placeholder="Enter the agency-name" id="field-agency-name">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-car-confirmation-number">Confirmation Number: </label>
+                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-car-confirmation-number">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-car-type">Car Type: </label>
+                <input type="text" name="car_type" placeholder="Enter the confirmation #" id="field-car-type">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-pickup-location">Pick-Up Location: </label>
+                <input type="text" name="pickup_from" placeholder="Enter the pickup location" id="field-pickup-location">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-pickup-time">Pick-Up Time: </label>
+                <input type="time" name="start-time" placeholder="Enter the pickup time" value="00:00" id="field-pickup-time">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-pickup-date">Pick-Up Date: </label>
+                <input type="date" name="start-date" placeholder="Enter the pickup date" id="field-pickup-date" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-dropoff-location">Drop-Off Location: </label>
+                <input type="text" name="dropoff_at" placeholder="Enter the dropoff location" id="field-dropoff-location">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-dropoff-time">Drop-Off Time: </label>
+                <input type="time" name="end-time" placeholder="Enter the dropoff time" value="00:00" id="field-dropoff-time">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-dropoff-date">Drop-Off Date: </label>
+                <input type="date" name="end-date" placeholder="Enter the dropoff date" id="field-dropoff-date" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-drivers-name">Driver Name: </label>
+                <input type="text" name="drivers-name" placeholder="Enter the drivers name" id="field-drivers-name">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-car-rental-rewards-number">Rewards Number: </label>
+                <input type="text" name="rewards-num" placeholder="Enter your rewards #" id="field-car-rental-rewards-number">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Trip Details">
+                <input type="hidden" value="car-rental" name="ftype">
+            </div>
+        </form>
+    </div>
+    <div class="form-event" id="public-transportation" hidden>
+        <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
+            <div class="form-group">
+                <label for="field-vendor-name">Vendor Name: </label>
+                <input type="text" name="vendor_name" placeholder="Enter the vendor name" id="field-vendor-name">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-vendor-confirmation-number">Confirmation Number: </label>
+                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-vendor-confirmation-number">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-vendor-departure-location">Departure Location: </label>
+                <input type="text" name="departs_from" placeholder="Enter the departure location" id="field-vendor-departure-location">  
+            </div>
+            <br>
+             <div class="form-group">
+                <label for="field-vendor-departure-date">Departure Date: </label>
+                <input type="date" name="start-date" placeholder="Enter the departure date" id="field-vendor-departure-date" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-vendor-departure-time">Departure Time: </label>
+                <input type="time" name="start-time" placeholder="Enter the departure time" value="00:00" id="field-vendor-departure-time">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-vendor-arrival-location">Arrival Location: </label>
+                <input type="text" name="arrives_to" placeholder="Enter the arrival location" id="field-vendor-arrival-location">   
+            </div>
+            <br>
+               <div class="form-group">
+                <label for="field-vendor-arrival-date">Arrival Date: </label>
+                <input type="date" name="end-date" placeholder="Enter the arrival date" id="field-vendor-arrival-date" required>   
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-vendor-arrival-time">Arrival Time: </label>
+                <input type="time" name="end-time" placeholder="Enter the arrival time" value="00:00" id="field-vendor-arrival-time">   
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-travelers_name">Name of Traveler: </label>
+                <input type="text" name="travelers-name" placeholder="Enter the travelers name" id="field-travelers-name">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-public-trans-duration">Duration: </label>
+                <input type="text" name="public-trans-duration" placeholder="Enter the duration" id="field-public-trans-duration">  
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-public-trans-num">Train/Bus #: </label>
+                <input type="text" name="public-trans-num" placeholder="Enter the train/bus #" id="field-public-trans-num">  
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="submit" value="Add Trip Details">
+                 <input type="hidden" value="public-transportation" name="ftype">
+            </div>
+        </form>
+    </div>
+    <div class="form-event" id="event" hidden>
+        <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
+            <div class="form-group">
+                <label for="field-event-name">Event Name: </label>
+                <input type="text" name="event_name" placeholder="Enter the event name" id="field-event-name">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-event-confirmation-number">Confirmation Number: </label>
+                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-event-confirmation-number">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-event-start-date">Start Date: </label>
+                <input type="date" name="start-date" placeholder="Enter the start date" id="field-start-date" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-event-start-time">Start Time: </label>
+                <input type="time" name="start-time" placeholder="Enter the start time" value="00:00" id="field-event-start-time">   
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-event-address">Address: </label>
+                <input type="text" name="address" placeholder="Enter the address" id="field-event-address">
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="submit" value="Add Trip Details">
+                <input type="hidden" value="event" name="ftype">
+            </div>
+        </form>
+    </div>
+    <div class="form-event" id="meeting" hidden>
+        <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
+            <div class="form-group">
+                <label for="field-meeting-subject">Subject of Meeting: </label>
+                <input type="text" name="meeting_subject" placeholder="Enter the subject of meeting" id="field-meeting-subject">
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-meeting-start-date">Start Date: </label>
+                <input type="date" name="start-date" placeholder="Enter the start date" id="field-meeting-start-date">   
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="field-meeting-start-time">Start Time: </label>
+                <input type="time" name="start-time" placeholder="Enter the start time" value="00:00" id="field-meeting-start-time">   
+            </div>
+            <br>
+              <div class="form-group">
+                <label for="field-meeting-address">Address: </label>
+                <input type="text" name="address" placeholder="Enter the address" id="field-meeting-address">
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="submit" value="Add Trip Details">
+                <input type="hidden" value="meeting" name="ftype">
+            </div>
+        </form>
+    </div>
+
+    <script>
+
+        $("#field-trip-confirmation").change(function() {
+            var idName = '#' + $("#field-trip-confirmation option:selected").val();
+            $(".form-event").hide();
+            $(idName).show();
+        });
+
+    </script>
+
+{% endblock %}

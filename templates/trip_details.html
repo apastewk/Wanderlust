@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% block title %}My Trip{% endblock %}
+
+{% block body %}
+
+    <h1>{{ trip_name }}</h1>
+
+    <a href="/my_trips">Return to My Trips</a>
+    <br>
+    <br>
+    <a href="/add_trip_details/{{ trip_id }}">Add an Event to my Trip</a>
+    <br>
+    <br>
+    {% for date in range_of_dates %}
+        {% for entity in trip_entities %}
+            {% if entity["starts_at"] == date %}
+                <h2>{{ entity["starts_at"] }}</h2>
+                {% if entity["flight_id"] %}
+                    <h3>{{ entity["start_time"] }}</h3>
+                    <h4>DEPART</h4> 
+                    <h3>Depart from {{ entity["departs_from"] }} ({{ entity["airpt_code_dep"] }}) Confirmation #: {{ entity["confirmation_num"] }}</h3>
+                    <div class="core_details">{{ entity["airline"] }} {{ entity["flight_num"] }} to {{ entity["arrives_to"] }} ({{ entity["airpt_code_arr"] }}) - Duration: {{ entity["duration"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Flight Details</h4>
+                        <div class="core_details">Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
+                        <div class="core_details">Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
+                        <div class="core_details">Duration: {{ entity["duration"] }}</div>
+                        <h4>Booking Details</h4>
+                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                        <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div>
+                    </div>
+                {% endif %}
+                {% if entity["hotel_id"] %}
+                    <h3>{{ entity["start_time"] }}</h3>
+                    <h4>CHECK-IN</h4> 
+                    <h3>{{ entity["hotel_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
+                    <div class="core_details">{{ entity["address"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Hotel Details</h4>
+                        <div class="core_details">Check-in: {{ entity["start_time"] }}</div>
+                        <div class="core_details">Check-out: {{ entity["end_time"] }}</div>
+                        <h4>Booking Details</h4>
+                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                        <div class="core_details">Type of room: {{ entity["room_type"] }}</div>
+                    </div>
+                {% endif %}
+                {% if entity["rental_id"] %}
+                    <h3>{{ entity["start_time"] }}</h3>
+                    <h4>PICK-UP</h4>
+                    <h3>{{ entity["agency_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
+                    <div class="core_details">{{ entity["pickup_from"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Rental Agency Details</h4>
+                        <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
+                        <div class="core_details">Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div>
+                        <h4>Booking Details</h4>
+                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                        <div class="core_details">Car Type: {{ entity["car_type"] }}</div>
+                        <div class="core_details">Driver: {{ entity["drivers_name"] }}</div>
+                        <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div> 
+                    </div>
+                {% endif %}
+                {% if entity["vendor_id"] %}
+                    <h3>{{ entity["start_time"] }}</h3>
+                    <h4>DEPART</h4>
+                    <h3>Depart from {{ entity["departs_from"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
+                    <div class="core_details">{{ entity["vendor_name"] }} {{ entity["transport_num"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Vendor Details</h4>
+                        <div class="core_details">Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
+                        <div class="core_details">Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
+                        <h4>Booking Details</h4>
+                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                        <div class="core_details">Travelers Name: {{ entity["travelers_name"] }}</div> 
+                        <div class="core_details">Duration: {{ entity["duration"] }}</div>
+                    </div>
+                {% endif %}
+                {% if entity["event_id"] %}
+                    <h3>{{ entity["start_time"] }}</h3>
+                    <h4>START TIME</h4>
+                    <h3>{{ entity["event_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
+                    <div class="core_details">{{ entity["address"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Event Details</h4>
+                        <div class="core_details">Start Time: {{ entity["start_time"] }}</div>
+                        <div class="core_details">Address: {{ entity["address"] }}</div>
+                        <h4>Booking Details</h4>
+                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                    </div>
+                {% endif %}
+                {% if entity["meeting_id"] %}
+                    <h3>{{ entity["start_time"] }}</h3>
+                    <h4>START TIME</h4>
+                    <h3>{{ entity["meeting_subject"] }}</h3>
+                    <div class="core_details">{{ entity["address"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Meeting Details</h4>
+                        <div class="core_details">Start Time: {{ entity["start_time"] }}</div>
+                        <div class="core_details">Address: {{ entity["address"] }}</div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            {% if entity["ends_at"] == date %}
+                <h2>{{ entity["ends_at"] }}</h2>
+                {% if entity["flight_id"] %}
+                    <h3>{{ entity["end_time"] }}</h3> 
+                    <h4>ARRIVE</h4> 
+                    <h3>Arrive in {{ entity["arrives_to"] }} ({{ entity["airpt_code_arr"] }})</h3>
+                    <div class="core_details">{{ entity["airline"] }} {{ entity["flight_num"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Booking Details</h4>
+                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                        <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div>
+                    </div>
+                {% endif %}
+                {% if entity["hotel_id"] %}
+                    <h3>{{ entity["end_time"] }}</h3>
+                    <h4>CHECK-OUT</h4> 
+                    <h3>{{ entity["hotel_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
+                    <div class="core_details">{{ entity["address"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Hotel Details</h4>
+                        <div class="core_details">Check-in: {{ entity["start_time"] }}</div>
+                        <div class="core_details">Check-out: {{ entity["end_time"] }}</div>
+                        <h4>Booking Details</h4>
+                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                       <div class="core_details">Type of room: {{ entity["room_type"] }}</div>
+                    </div>
+                {% endif %}
+                {% if entity["rental_id"] %}
+                    <h3>{{ entity["end_time"] }}</h3>
+                    <h4>DROP-OFF</h4>
+                    <h3>{{ entity["agency_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
+                    <div class="core_details">{{ entity["dropoff_to"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Rental Agency Details</h4>
+                        <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
+                        <div>Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div class="core_details">
+                        <h4>Booking Details</h4>
+                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                        <div class="core_details">Car Type: {{ entity["car_type"] }}</div>
+                        <div class="core_details">Driver: {{ entity["drivers_name"] }}</div>
+                        <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div> 
+                    </div>
+                {% endif %}
+                {% if entity["vendor_id"] %}
+                    <h3>{{ entity["end_time"] }}</h3>
+                    <h4>ARRIVE</h4>
+                    <h3>Arrive in {{ entity["arrives_to"] }}</h3>
+                    <div class="core_details">{{ entity["vendor_name"] }} {{ entity["transport_num"] }}</div>
+                    <br>
+                    <button class="toggle">Show more details</button>
+                    <div class="wrapper" style="display: none;">
+                        <h4>Booking Details</h4>
+                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                        <div class="core_details">Travelers Name: {{ entity["travelers_name"] }}</div> 
+                        <div class="core_details">Duration: {{ entity["duration"] }}</div> 
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    <script> 
+        $(".toggle").click(function() {
+            $(this).next(".wrapper").slideToggle("slow");
+
+            var text = $(this).text();
+            $(this).text(text == "Show more details" ? "Hide extra details" : "Show more details");
+        });
+    </script>
+    
+
+{% endblock %}
