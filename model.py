@@ -26,7 +26,7 @@ class User(db.Model):
     firstname = db.Column(db.String(20))
     lastname = db.Column(db.String(20))
     email = db.Column(db.String(64))
-    password = db.Column(db.String(64))
+    password = db.Column(db.String(200))
 
     trip = db.relationship("Trip")
 
@@ -85,7 +85,6 @@ class Flight(db.Model):
     rewards_num = db.Column(db.String(20), nullable=True)
 
     trip = db.relationship("Trip")
-    passenger = db.relationship("Passenger")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -93,24 +92,6 @@ class Flight(db.Model):
         return "<Flight flight_id: {}, trip_id: {}, departs_from: {}, starts_at: {}, arrives_to: {}, ends_at: {}".format(
             self.flight_id, self.trip_id, self.departs_from, self.starts_at,
             self.arrives_to, self.ends_at)
-
-
-class Passenger(db.Model):
-    """Passengers on a particular flight."""
-
-    __tablename__ = "passengers"
-
-    passenger_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    flight_id = db.Column(db.Integer, db.ForeignKey("flights.flight_id"))
-    passenger_name = db.Column(db.String(40), nullable=True)
-
-    flight = db.relationship("Flight")
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<Passengers passenger_name: passenger_name, flight_id: flight_id>".format(
-            self.passenger_name, self.flight_id)
 
 
 class Hotel(db.Model):

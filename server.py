@@ -4,13 +4,16 @@ import os
 
 from flask import Flask, render_template, redirect, request, flash, session
 
-from model import User, Trip, Flight, Passenger, Hotel, CarRental
-from model import PublicTransportation, Meeting, Event, connect_to_db, db
+from model import User, Trip, Flight, Hotel, CarRental, PublicTransportation
+from model import Meeting, Event, connect_to_db, db
 from utility import make_start_datetime_obj, make_end_datetime_obj, get_trip_entities
 from utility import daterange
+from xml_parser import worldmate_xml_parser
 
 from datetime import datetime, timedelta, date
 import psycopg2
+
+import hashlib, uuid
 
 
 app = Flask(__name__)
@@ -47,6 +50,9 @@ def sign_up():
     email = request.form.get("email")
     password = request.form.get("password")
 
+    # salt = uuid.uuid4().hex
+    hashed_password = hashlib.sha224(password).hexdigest()[:20]
+
     if User.query.filter(User.email == email).first():
         flash("That email is already registered.  Please log in or choose a different email.")
         return redirect("/signup")
@@ -54,7 +60,7 @@ def sign_up():
         new_user = User(email=email,
                         firstname=firstname,
                         lastname=lastname,
-                        password=password)
+                        password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         flash("You are now registered! Please login.")
@@ -78,10 +84,12 @@ def login():
     email = request.form.get("email")
     password = request.form.get("password")
 
+    # salt = uuid.uuid4().hex
+    hashed_password = hashlib.sha224(password).hexdigest()[:20]
     check_email = User.query.filter(User.email == email).first()
 
     if check_email:
-        if check_email.password == password:
+        if check_email.password == hashed_password:
             session["logged_in"] = email
             return redirect("/my_trips")
         else:
@@ -259,17 +267,22 @@ def add_form_trip_details(trip_id):
     # db.session.add(instance)
     # db.session.commit()
 
-
     return redirect("/my_trips/" + trip_id)
 
 
-@app.route("/my_trips/<trip_id>")
-def add_email_trip_details(trip_id):
-    """Adds the parsed email trip details to the database.""" 
+@app.route("/incoming_xml", methods=["POST"])
+def process_incoming_xml():
+    """Parses email XML and adds the parsed email trip details to the database."""
 
-    if 
+    xml_string = request.data
 
-    create_item(email_type, , trip_id)
+    worldmate_xml_parser(xml_string)
+
+    # if 
+    # create_item(email_type, , trip_id)
+
+
+
 
 if __name__ == "__main__":
 

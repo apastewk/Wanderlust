@@ -10,9 +10,9 @@ def create_item(item_type, item_data, trip_id):
 
     if item_type in router_map:
         instance = router_map[item_type]()
-  
+ 
     for key in item_data:
-        if item_data:
+        if item_data[key]:
             if key == "start-date":
                 instance.starts_at = make_start_datetime_obj()
             elif key == "end-date":
