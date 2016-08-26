@@ -76,12 +76,12 @@ class Flight(db.Model):
     airline = db.Column(db.String(20), nullable=True)
     flight_num = db.Column(db.String(10), nullable=True)
     starts_at = db.Column(db.DateTime, nullable=True)
-    departs_from = db.Column(db.String(20), nullable=True)
+    departs_from = db.Column(db.String(64), nullable=True)
     airpt_code_dep = db.Column(db.String(3), nullable=True)
     ends_at = db.Column(db.DateTime, nullable=True)
-    arrives_to = db.Column(db.String(20), nullable=True)
+    arrives_to = db.Column(db.String(64), nullable=True)
     airpt_code_arr = db.Column(db.String(3), nullable=True)
-    duration = db.Column(db.Float(2), nullable=True)
+    duration = db.Column(db.Integer, nullable=True)
     rewards_num = db.Column(db.String(20), nullable=True)
 
     trip = db.relationship("Trip")
@@ -210,6 +210,27 @@ class Meeting(db.Model):
         return "<Meeting meeting_id: {}, trip_id: {} meeting_subject: {}, starts_at: {}>".format(
             self.meeting_id, self.trip_id, self.meeting_subject, self.starts_at)
 
+def example_data():
+    """Create some sample data."""
+
+    meeting = Meeting(trip_id=1,
+                      meeting_subject="Uber",
+                      starts_at=datetime.strptime("2016-08-26 18:00:00", "%Y-%m-%d %H:%M"),
+                      address="123 Cooper St, Oakland, CA")
+
+    trip = Trip(user_id=1,
+                start_date=datetime.strptime("2016-08-10 00:00:00", "%Y-%m-%d %H:%M"),
+                end_date=datetime.strptime("2016-09-20 00:00:00", "%Y-%m-%d %H:%M"),
+                trip_name="Rome",
+                destination="Rome")
+
+    user = User(firstname="Lauren",
+                lastname="Budd",
+                email="laurenb@gmail.com",
+                password="test123")
+
+    db.session.add_all([meeting, trip, user])
+    db.session.commit()
 
 ################################################################################
 

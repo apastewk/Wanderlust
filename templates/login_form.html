@@ -3,46 +3,6 @@
 
 {% block body %}
 
-    <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-            </div>
-            <div class="modal-body">
-            <p>
-                <h1>Login to Your Account</h1>
-                <br>
-                <form action="/login" method="POST" role="form">
-                    <div class="form-group">
-                        <label for="field-login-email">Email Address: </label>
-                        <input type="text" name="email" placeholder="Enter your email" id-="field-login-email" required>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label for="field-login-password">Password: </label>
-                        <input type="password" name="password" placeholder="Enter your password" id-="field-login-password" required>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <input type="submit" value="Login">
-                    </div>
-                </form>
-                <p>Don't have account? <a class="signup" href="/signup" id="signup">Sign up here</a></p>
-            </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-      </div>
-    </div>
-
     <h1>Login to Your Account</h1>
     <br>
     <form action="/login" method="POST" role="form">

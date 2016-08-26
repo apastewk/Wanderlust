@@ -6,7 +6,7 @@
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">WebSiteName</a>
+                <a class="navbar-brand">WebSiteName</a>
             </div>
             <ul class="nav navbar-nav">
               <li class="active"><a href="#">Home</a></li>
@@ -14,19 +14,71 @@
               <li><a href="#">Page 2</a></li> 
             </ul>
             <ul class="nav navbar-nav navbar-right">
+              <li><a href="/my_trips"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
               <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
       </div>
     </nav>
-
-    <h1>My Trips</h1>
-    <a href="/add_new_trip">Create new trip</a>
-    <br>
-    <br>
-    {% for trip in trips %}
-
-        <h3><a href="/my_trips/{{ trip[4] }}">{{ trip[0] }} &nbsp;&nbsp; {{ trip[1] }} - {{ trip[2] }} &nbsp; {{ trip[3] }}</a></h3>
-
-    {% endfor %} 
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 id="my-trips">My Trips</h1> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-offset-11 col-xs-1">
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#newtrip-modal">Create new trip</button>
+                </div>
+            </div>  
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-offset-2 col-xs-8">
+                    {% if trips %}
+                    {% for trip in trips %}
+                    <h3 id="trips-list"><a href="/my_trips/{{ trip[4] }}">{{ trip[0] }} &nbsp;&nbsp; {{ trip[1] }} - {{ trip[2] }} &nbsp; {{ trip[3] }}</a></h3>
+                    {% endfor %} 
+                    {% endif %}
+    </div>
+     <div class="modal fade" id="newtrip-modal" tabindex="-1" role="dialog" aria-labelledby="newtrip-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title" id="myModalLabel">Add a Trip</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="/my_trips" method="POST" role="form">
+                        <div class="form-group">
+                            <label for="field-destination">Destination*: </label>
+                            <input type="text" name="destination" placeholder="Enter your destination" id-="field-destination" autocomplete="on" required>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="field-tripname">Trip Name*: </label>
+                            <input type="text" name="tripname" placeholder="Enter your trip name" id-="field-tripname" required>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            Dates*:
+                            <label for="field-startdate"></label>
+                            <input type="date" name="startdate" placeholder="Start" id-="field-startdate">
+                            <label for="field-enddate"></label>
+                            <input type="date" name="enddate" placeholder="End" id="field-enddate" required>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="field-optionalnotes">Notes (optional): </label>
+                            <input type="text" name="notes" id-="field-optionalnotes">   
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Add Trip" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

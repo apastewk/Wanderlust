@@ -1,29 +1,26 @@
-from flask import request
 from operator import attrgetter
 from datetime import datetime, timedelta
+import hashlib, uuid
 
 ################################################################################
 
-def make_start_datetime_obj():
-    """Combines start_date and start_time form inputs into a datetime object."""
 
-    s_date = request.form.get("start-date", None)
-    s_time = request.form.get("start-time", None)
+def make_datetime_obj(date, time):
+    """Combines start_date and start_time form inputs into a datetime object.
 
-    conv_date = datetime.strptime(s_date, "%Y-%m-%d").date()
-    conv_time = datetime.strptime(s_time, "%H:%M").time()
+    >>> start_date = 2016-08-26
+    ... start_time = 18:00
 
-    return datetime.combine(conv_date, conv_time)
+    >>> make_start_datetime_obj()
+    ('2016-08-26' 18:00:00')
 
+    """
 
-def make_end_datetime_obj():
-    """Combines end_date and end_time form inputs into a datetime object."""
-
-    e_date = request.form.get("end-date", None)
-    e_time = request.form.get("end-time", None)
-
-    conv_date = datetime.strptime(e_date, "%Y-%m-%d").date()
-    conv_time = datetime.strptime(e_time, "%H:%M").time()
+    print date
+    print time
+    conv_date = datetime.strptime(date, "%Y-%m-%d").date()
+    print conv_date
+    conv_time = datetime.strptime(time, "%H:%M").time()
 
     return datetime.combine(conv_date, conv_time)
 
@@ -36,7 +33,18 @@ def get_trip_entities(trip):
     return sorted_results
 
 
-def daterange(start_date, end_date):
-    """Determines"""
-    for n in range(int((end_date - start_date).days)):
-        yield start_date + timedelta(n)
+# def daterange(start_date, end_date):
+#     """Determines"""
+#     for n in range(int((end_date - start_date).days)):
+#         yield start_date + timedelta(n)
+
+
+def hash_password(password):
+    """Hashes a users password."""
+
+     # salt = uuid.uuid4().hex
+    return hashlib.sha224(password).hexdigest()[:20]
+
+
+
+

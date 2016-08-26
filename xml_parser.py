@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+from service import identify_email_type, identify_users_trip
 
 from datetime import datetime
 
@@ -27,24 +28,35 @@ def worldmate_xml_parser(xml_string):
         for item in root.iter("items"):
             if item.find(result_type) is not None:
                 if result_type == "flight":
-                    flight_parser(xml_string)
+                    flight_parser(root)
                 elif result_type == "hotel-reservation":
-                    hotel_parser(xml_string)
+                    hotel_parser(root)
                 elif result_type == "car-rental":
-                    car_rental_parser(xml_string)
+                    car_rental_parser(root)
                 elif result_type == "public-transporation":
-                    public_transportation_parser(xml_string)
+                    public_transportation_parser(root)
                 elif result_type == "event":
-                    event_parser(xml_string)
+                    event_parser(root)
                 elif result_type == "meeting":
-                    meeting_parser(xml_string)
-            print result_type
+                    meeting_parser(root)
 
 
-def flight_parser(flights):
+def user_parser(root):
+    """Parses for user details."""
+
+    user_email = None
+
+    for flight in root.iter("end-user-emails"):
+        user = flight.find("user")
+        if user is not None:
+            user_email = user.attrib["email"]
+
+    return user_email
+
+
+def flight_parser(root):
     """Parses for flight details."""
 
-    root = ET.fromstring(flights)
     parsed_data = {}
 
     for flight in root.iter("flight"):
@@ -60,7 +72,7 @@ def flight_parser(flights):
         parsed_data["flight"]["confirmation_num"] = provider_details.findtext("confirmation-number", default=None)
         parsed_data["flight"]["airline"] = provider_details.findtext("name", default=None)
         parsed_data["flight"]["flight_num"] = None
-        if details:
+        if details is not None:
             airline_code = details.attrib["airline-code"]
             airline_number = details.attrib["number"]
             parsed_data["flight"]["flight_num"] = airline_code + " " + airline_number
@@ -74,20 +86,21 @@ def flight_parser(flights):
         parsed_data["flight"]["airpt_code_arr"] = arrival.findtext("airport-code", default=None)
         parsed_data["flight"]["duration"] = flight.findtext("duration", default=None)
         parsed_data["flight"]["rewards_num"] = None
-        if traveler.find("loyalty-program"):
+        if traveler.find("loyalty-program") is not None:
             parsed_data["flight"]["rewards_num"] = traveler.find("loyalty-program").attrib["number"]
 
-    return parsed_data["flight"]
+    trip_id = identify_users_trip(parsed_data["flight"]["starts_at"], user_parser(root))
+
+    identify_email_type(parsed_data, trip_id)
 
 
-def hotel_parser(hotels):
+def hotel_parser(root):
     """Parses for hotel details."""
 
-    root = ET.fromstring(hotels)
     parsed_data = {}
 
     for hotel in root.iter("hotel-reservation"):
-    
+      
         parsed_data["hotel"] = {}
 
         booking_details = hotel.find("booking-details")
@@ -105,13 +118,14 @@ def hotel_parser(hotels):
         parsed_data["hotel"]["ends_at"] = datetime.strptime(ends_at_xml, "%Y-%m-%d")
         parsed_data["hotel"]["room_type"] = hotel.findtext("room", default=None)
 
-    return parsed_data["hotel"]
+    trip_id = identify_users_trip(parsed_data["hotel"]["starts_at"], user_parser(root))
+
+    identify_email_type(parsed_data, trip_id)
 
 
-def car_rental_parser(car_rentals):
+def car_rental_parser(root):
     """Parses for car rental details."""
 
-    root = ET.fromstring(car_rentals)
     parsed_data = {}
 
     for car_rental in root.iter("car-rental"):
@@ -144,19 +158,20 @@ def car_rental_parser(car_rentals):
         last_name = driver.findtext("last-name", default=None)
         parsed_data["car-rental"]["drivers_name"] = first_name + " " + last_name
         parsed_data["car-rental"]["car_type"] = None
-        if car_type:
+        if car_type is not None:
             parsed_data["car-rental"]["car_type"] = car_type.attrib["name"]
         parsed_data["car-rental"]["rewards_num"] = None
-        if driver.find("loyalty-program"):
+        if driver.find("loyalty-program") is not None:
             parsed_data["car-rental"]["rewards_num"] = driver.find("loyalty-program").attrib["number"]
 
-    return parsed_data["car-rental"]
+    trip_id = identify_users_trip(parsed_data["car-rental"]["starts_at"], user_parser(root))
+
+    identify_email_type(parsed_data, trip_id)
 
 
-def public_transportation_parser(public_transportation):
+def public_transportation_parser(root):
     """Parses for public transportation details."""
 
-    root = ET.fromstring(public_transportation)
     parsed_data = {}
 
     for public_transportation in root.iter("public-transporation"):
@@ -188,13 +203,14 @@ def public_transportation_parser(public_transportation):
         parsed_data["public-transporation"]["travelers_name"] = first_name + " " + last_name
         parsed_data["public-transporation"]["duration"] = public_transportation.findtext("duration", default=None)
 
-    return parsed_data["public-transporation"]
+    trip_id = identify_users_trip(parsed_data["public-transportation"]["starts_at"], user_parser(root))
+
+    identify_email_type(parsed_data, trip_id)
 
 
-def event_parser(event):
+def event_parser(root):
     """Parses for event details."""
 
-    root = ET.fromstring(event)
     parsed_data = {}
 
     for event in root.iter("event"):
@@ -214,13 +230,14 @@ def event_parser(event):
         state_code = address.findtext("state-code", default=None)
         parsed_data["event"]["address"] = location + " " + street + " " + city + ", " + state_code
 
-    return parsed_data["event"]
+    trip_id = identify_users_trip(parsed_data["event"]["starts_at"], user_parser(root))
+
+    identify_email_type(parsed_data, trip_id)
 
 
-def meeting_parser(meeting):
+def meeting_parser(root):
     """Parses for meeting details."""
 
-    root = ET.fromstring(meeting)
     parsed_data = {}
 
     for meeting in root.iter("meeting"):
@@ -238,4 +255,6 @@ def meeting_parser(meeting):
         state_code = address.findtext("state-code", default=None)
         parsed_data["meeting"]["address"] = location + " " + street + " " + city + " " + state_code
 
-    return parsed_data["meeting"]
+    trip_id = identify_users_trip(parsed_data["meeting"]["starts_at"], user_parser(root))
+
+    identify_email_type(parsed_data, trip_id)
