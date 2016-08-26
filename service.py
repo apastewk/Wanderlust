@@ -80,6 +80,26 @@ def add_new_trip_to_db(destination, trip_name, start_date, end_date, notes):
     db.session.commit()
 
 
+def create_trip_entities_dict(trip_entities):
+    """Converts a list of trip entities into a modified dictionary."""
+
+    trip_entities = [entity.__dict__ for entity in trip_entities]
+
+    for entity in trip_entities:
+        if "_sa_instance_state" in entity:
+            del entity["_sa_instance_state"]
+        if "starts_at" in entity:
+            entity["start_time"] = entity["starts_at"].strftime("%H:%M")
+            entity["starts_at"] = entity["starts_at"].strftime("%a, %b %d, %Y")
+        if "ends_at" in entity:
+            entity["end_time"] = entity["ends_at"].strftime("%H:%M")
+            entity["ends_at"] = entity["ends_at"].strftime("%a, %b %d, %Y")
+        else:
+            continue
+
+    return trip_entities
+
+
 def identify_email_type(parsed_data, trip_id):
     """Identifies type of email and the data the will be put in the database."""
 

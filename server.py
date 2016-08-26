@@ -1,10 +1,10 @@
 """User Trips"""
 
 from flask import Flask, render_template, redirect, request, flash, session
-from model import connect_to_db, db, User, Trip
+from model import connect_to_db, User, Trip
 from utility import hash_password, get_trip_entities
 from service import create_item, check_login, signup, retrieves_user_trips
-from service import add_new_trip_to_db
+from service import add_new_trip_to_db, create_trip_entities_dict
 from xml_parser import worldmate_xml_parser
 
 
@@ -117,7 +117,7 @@ def trip_details(trip_id):
     start_date = trip.start_date
     end_date = trip.end_date
 
-    range_of_dates = []
+    # range_of_dates = []
 
     # for single_date in daterange(start_date, end_date):
     #     conv_single_date = single_date.strftime("%a, %b %d, %Y")
@@ -125,25 +125,12 @@ def trip_details(trip_id):
 
     trip_entities = get_trip_entities(trip)
 
-    trip_entities = [entity.__dict__ for entity in trip_entities]
-
-    for entity in trip_entities:
-        if "_sa_instance_state" in entity:
-            del entity["_sa_instance_state"]
-        if "starts_at" in entity:
-            entity["start_time"] = entity["starts_at"].strftime("%H:%M")
-            entity["starts_at"] = entity["starts_at"].strftime("%a, %b %d, %Y")
-        if "ends_at" in entity:
-            entity["end_time"] = entity["ends_at"].strftime("%H:%M")
-            entity["ends_at"] = entity["ends_at"].strftime("%a, %b %d, %Y")
-        else:
-            continue
+    trip_entities = create_trip_entities_dict(trip_entities)
 
     return render_template("trip_details.html",
                             trip_id=trip_id,
                             trip_name=trip_name,
-                            trip_entities=trip_entities,
-                            range_of_dates=range_of_dates)
+                            trip_entities=trip_entities)
 
 
 @app.route("/my_trips/<trip_id>", methods=["POST"])
