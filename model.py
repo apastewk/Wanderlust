@@ -210,24 +210,25 @@ class Meeting(db.Model):
         return "<Meeting meeting_id: {}, trip_id: {} meeting_subject: {}, starts_at: {}>".format(
             self.meeting_id, self.trip_id, self.meeting_subject, self.starts_at)
 
+
 def example_data():
     """Create some sample data."""
 
     meeting = Meeting(trip_id=1,
                       meeting_subject="Uber",
-                      starts_at=datetime.strptime("2016-08-26 18:00:00", "%Y-%m-%d %H:%M"),
+                      starts_at=datetime.strptime("2016-08-26 18:00:00", "%Y-%m-%d %H:%M:%S"),
                       address="123 Cooper St, Oakland, CA")
 
     trip = Trip(user_id=1,
-                start_date=datetime.strptime("2016-08-10 00:00:00", "%Y-%m-%d %H:%M"),
-                end_date=datetime.strptime("2016-09-20 00:00:00", "%Y-%m-%d %H:%M"),
+                start_date=datetime.strptime("2016-08-10 00:00:00", "%Y-%m-%d %H:%M:%S"),
+                end_date=datetime.strptime("2016-09-20 00:00:00", "%Y-%m-%d %H:%M:%S"),
                 trip_name="Rome",
                 destination="Rome")
 
     user = User(firstname="Lauren",
                 lastname="Budd",
                 email="laurenb@gmail.com",
-                password="test123")
+                password="f8cdb04495ded4761525")
 
     db.session.add_all([meeting, trip, user])
     db.session.commit()
@@ -237,10 +238,10 @@ def example_data():
 # Helepr Functions
 
 
-def connect_to_db(app):
+def connect_to_db(app, db_uri="postgresql:///trips"):
     """Connect the database to Flask app."""
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "postgresql:///trips")
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     db.app = app
     db.init_app(app)

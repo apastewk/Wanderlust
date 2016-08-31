@@ -2,9 +2,10 @@
 
 from flask import Flask, render_template, redirect, request, flash, session
 from model import connect_to_db, User, Trip
-from utility import hash_password, get_trip_entities
-from service import create_item, check_login, signup, retrieves_user_trips
-from service import add_new_trip_to_db, create_trip_entities_dict
+from utility import hash_password, get_trip_entities, modifies_user_trips
+from utility import create_trip_entities_dict, count_user_trips
+from service import create_item, check_login, signup, add_new_trip_to_db
+import flickr
 from xml_parser import worldmate_xml_parser
 
 
@@ -19,7 +20,6 @@ app.secret_key = "ABC"
 @app.route("/")
 def homepage():
     """Displays the homepage."""
-
     return render_template("home.html")
 
 
@@ -41,7 +41,7 @@ def sign_up():
     signup(firstname, lastname, email, hashed_password)
 
     return redirect("/")
-        
+
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -56,7 +56,7 @@ def login():
     hashed_password = hash_password(password)
 
     login = check_login(email, hashed_password)
-       
+
     if login:
         return redirect("/my_trips")
     else:
@@ -84,10 +84,16 @@ def all_trips():
     else:
         redirect("/login ")
 
-    trips_list = retrieves_user_trips(session_user_id)
+    trip_count = count_user_trips(session_user_id)
+
+    past_trips = modifies_user_trips(trip_count[1][1])
+    
+    future_trips = modifies_user_trips(trip_count[1][0])
 
     return render_template("all_trips.html",
-                            trips=trips_list)
+                            trip_count=trip_count,
+                            past_trips=past_trips,
+                            future_trips=future_trips)
 
 
 @app.route("/my_trips", methods=["POST"])
@@ -113,15 +119,18 @@ def trip_details(trip_id):
 
     trip = Trip.query.filter(Trip.trip_id == trip_id).first()
     trip_name = trip.trip_name
+    destination = trip.destination
 
-    start_date = trip.start_date
-    end_date = trip.end_date
+    # start_date = trip.start_date
+    # end_date = trip.end_date
 
     # range_of_dates = []
 
     # for single_date in daterange(start_date, end_date):
     #     conv_single_date = single_date.strftime("%a, %b %d, %Y")
     #     range_of_dates.append(conv_single_date)
+
+    # flickr.flickr_search(destination)
 
     trip_entities = get_trip_entities(trip)
 
@@ -151,6 +160,9 @@ def process_incoming_xml():
     xml_string = request.data
 
     worldmate_xml_parser(xml_string)
+
+
+
 
     ############################################################################
 

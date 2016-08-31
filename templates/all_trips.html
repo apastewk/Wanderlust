@@ -2,46 +2,99 @@
 {% block title %}My Trips{% endblock %}
 
 {% block body %}
-    
-    <nav class="navbar navbar-inverse">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand">WebSiteName</a>
+                <a class="navbar-brand" id="nav-title" href="/">Wanderlust</a>
             </div>
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#">Page 1</a></li>
-              <li><a href="#">Page 2</a></li> 
-            </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/my_trips"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
               <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
       </div>
     </nav>
-    <div class="container-fluid">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1 id="my-trips">My Trips</h1> 
+    <div class="container-fluid" id="my-trips-position">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 id="my-trips">My Trips</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-offset-8 col-xs-2">
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#newtrip-modal">Create new trip</button>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="table-position">
+        <div class="row">
+            <div class="col-xs-offset-1 col-xs-2">
+                <!-- <p><span id="past">Past ({{ trip_count[0][1] }})</span>&nbsp;&nbsp;&nbsp;<span id="future">Future ({{ trip_count[0][0] }})</span></p> -->
+                <button id="past">Past ({{ trip_count[0][1] }})</button>&nbsp;
+                <button id="future">Future ({{ trip_count[0][0] }})</button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-offset-1 col-xs-10">
+                <div class="table-responsive" class="past-trips">
+                    <table class="table table-striped">
+                        <tr>
+                            <th class="text-center1" hidden>Destination</th>
+                            <th class="text-center1" hidden>Start Date</th>
+                            <th class="text-center1" hidden>End Date</th>
+                            <th class="text-center1" hidden>Notes</th>
+                            <th class="text-center1" hidden>More Details</th>
+                        </tr>
+                        {% if past_trips %}
+                        {% for trip in past_trips %}
+                        <tr>
+                            <td class="text-center1" hidden> {{ trip[0] }}</td>
+                            <td class="text-center1" hidden> {{ trip[1] }}</td>
+                            <td class="text-center1" hidden> {{ trip[2] }}</td>
+                            <td class="text-center1" hidden> {{ trip[3] }}</td>
+                            <td class="text-center1" hidden>
+                                <a href="/my_trips/{{ trip[4] }}">
+                                    <span class="glyphicon glyphicon-search">
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+                <div class="table-responsive" class="future-trips">
+                    <table class="table table-striped" >
+                        <tr>
+                            <th class="text-center2">Destination</th>
+                            <th class="text-center2">Start Date</th>
+                            <th class="text-center2">End Date</th>
+                            <th class="text-center2">Notes</th>
+                            <th class="text-center2">More Details</th>
+                        </tr>
+                        {% if future_trips %}
+                        {% for trip in future_trips %}
+                        <tr>
+                            <td class="text-center2"> {{ trip[0] }}</td>
+                            <td class="text-center2"> {{ trip[1] }}</td>
+                            <td class="text-center2"> {{ trip[2] }}</td>
+                            <td class="text-center2"> {{ trip[3] }}</td>
+                            <td class="text-center2">
+                                <a href="/my_trips/{{ trip[4] }}">
+                                    <span class="glyphicon glyphicon-search">
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </table>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-offset-11 col-xs-1">
-                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#newtrip-modal">Create new trip</button>
-                </div>
-            </div>  
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-offset-2 col-xs-8">
-                    {% if trips %}
-                    {% for trip in trips %}
-                    <h3 id="trips-list"><a href="/my_trips/{{ trip[4] }}">{{ trip[0] }} &nbsp;&nbsp; {{ trip[1] }} - {{ trip[2] }} &nbsp; {{ trip[3] }}</a></h3>
-                    {% endfor %} 
-                    {% endif %}
     </div>
-     <div class="modal fade" id="newtrip-modal" tabindex="-1" role="dialog" aria-labelledby="newtrip-modal" aria-hidden="true">
+    <div class="modal fade" id="newtrip-modal" tabindex="-1" role="dialog" aria-labelledby="newtrip-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -70,7 +123,7 @@
                         <br>
                         <div class="form-group">
                             <label for="field-optionalnotes">Notes (optional): </label>
-                            <input type="text" name="notes" id-="field-optionalnotes">   
+                            <input type="text" name="notes" id-="field-optionalnotes">
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -80,5 +133,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $("#past").click(function() {
+            $(".text-center2").hide();
+            $(".text-center1").show();
+        });
+
+        $("#future").click(function() {
+            $(".text-center1").hide();
+            $(".text-center2").show();
+        });
+    </script>
 
 {% endblock %}

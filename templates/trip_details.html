@@ -25,22 +25,28 @@
                     <h1 id="trips-list">{{ trip_name }}</h1>
                 </div>
             </div>
-        </div>
-    </div> 
-    <a href="/my_trips">Return to My Trips</a>
-    <br>
-    <br>
-        <div class="row">
-            <div class="col-xs-offset-9 col-xs-3">
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#event-modal">Add an Event to my Trip</button>
+            <div class="row">
+                <div class="col-xs-offset-3 col-xs-3">
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#event-modal">Add an Event to my Trip</button>
+                </div> 
+                <div class="col-xs-offset-6 col-xs-3">
+                    <a type="button" class="btn btn-info btn-lg" href="/my_trips">Return to My Trips</a>
+                </div>
             </div>
-        </div> 
-    </div> 
+        </div>
+    </div>
+
     <div class="container">
+    <div class="row">
+    <div class="col-xs-offset-2 col-xs-8">
+    <div class="panel panel-default">
         {% for entity in trip_entities %}
             {% if entity["starts_at"] %}
+            <div class="panel-heading">
                 <h2>{{ entity["starts_at"] }}</h2>
+            </div>
                 {% if entity["flight_id"] %}
+                <div class="panel-body">
                     <h3>{{ entity["start_time"] }}</h3>
                     <h4>DEPART</h4> 
                     <h3>Depart from {{ entity["departs_from"] }} ({{ entity["airpt_code_dep"] }}) Confirmation #: {{ entity["confirmation_num"] }}</h3>
@@ -56,8 +62,10 @@
                         <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
                         <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div>
                     </div>
+                </div>
                 {% endif %}
                 {% if entity["hotel_id"] %}
+                <div class="panel-body">
                     <h3>{{ entity["start_time"] }}</h3>
                     <h4>CHECK-IN</h4> 
                     <h3>{{ entity["hotel_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
@@ -72,8 +80,10 @@
                         <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
                         <div class="core_details">Type of room: {{ entity["room_type"] }}</div>
                     </div>
+                </div>
                 {% endif %}
                 {% if entity["rental_id"] %}
+                <div class="panel-body">
                     <h3>{{ entity["start_time"] }}</h3>
                     <h4>PICK-UP</h4>
                     <h3>{{ entity["agency_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
@@ -90,8 +100,10 @@
                         <div class="core_details">Driver: {{ entity["drivers_name"] }}</div>
                         <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div> 
                     </div>
+                </div>
                 {% endif %}
                 {% if entity["vendor_id"] %}
+                <div class="panel-body">
                     <h3>{{ entity["start_time"] }}</h3>
                     <h4>DEPART</h4>
                     <h3>Depart from {{ entity["departs_from"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
@@ -107,8 +119,10 @@
                         <div class="core_details">Travelers Name: {{ entity["travelers_name"] }}</div> 
                         <div class="core_details">Duration: {{ entity["duration"] }}</div>
                     </div>
+                </div>
                 {% endif %}
                 {% if entity["event_id"] %}
+                 <div class="panel-body">
                     <h3>{{ entity["start_time"] }}</h3>
                     <h4>START TIME</h4>
                     <h3>{{ entity["event_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
@@ -122,8 +136,10 @@
                         <h4>Booking Details</h4>
                         <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
                     </div>
+                </div>
                 {% endif %}
                 {% if entity["meeting_id"] %}
+                <div class="panel-body">
                     <h3>{{ entity["start_time"] }}</h3>
                     <h4>START TIME</h4>
                     <h3>{{ entity["meeting_subject"] }}</h3>
@@ -135,10 +151,15 @@
                         <div class="core_details">Start Time: {{ entity["start_time"] }}</div>
                         <div class="core_details">Address: {{ entity["address"] }}</div>
                     </div>
+                </div>
                 {% endif %}
             {% endif %}
+    
+        <div class="panel-heading">
             {% if entity["ends_at"] %}
                 <h2>{{ entity["ends_at"] }}</h2>
+            </div>
+            <div class="panel-body">
                 {% if entity["flight_id"] %}
                     <h3>{{ entity["end_time"] }}</h3> 
                     <h4>ARRIVE</h4> 
@@ -201,7 +222,11 @@
                     </div>
                 {% endif %}
             {% endif %}
+        </div>
         {% endfor %}
+    </div>
+    </div>
+    </div>
     <div class="modal fade" id="event-modal" tabindex="-1" role="dialog" aria-labelledby="event-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -541,22 +566,31 @@
     </div>
 
     <script>
+        // import os;
+
+        // FLICKR_KEY = os.environ["FLICKR_KEY"]
+        // FLICKR_SECRET = os.environ["FLICKR_SECRET"]
+
+        $.get("https://api.flickr.com/services/rest/?method=flickr.photos.search&text=calgary&tags=calgary+&tags=+downtown&tags=+skyline&per_page=3&field-trip-confirmationt=json&nojsoncallback=1&api_key=42e04b071b3c85f33c0892cb9bba7560", function(data) {
+            $.each(data.photos.photo, function(i, item) {
+                var photoURL = "http://farm" + item.farm + ".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_c.jpg";
+                $('body').html('<img src='+ photoURL +'/>');
+            });
+        });
 
         $("#field-trip-confirmation").change(function() {
             var idName = '#' + $("#field-trip-confirmation option:selected").val();
             $(".form-event").hide();
             $(idName).show();
         });
-
-    </script>
-
-    <script> 
+  
         $(".toggle").click(function() {
             $(this).next(".wrapper").slideToggle("slow");
 
             var text = $(this).text();
             $(this).text(text == "Show more details" ? "Hide extra details" : "Show more details");
         });
+
     </script>
     
 

@@ -3,25 +3,29 @@
 
 {% block body %}
 
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">WebSiteName</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Page 1</a></li>
-          <li><a href="#">Page 2</a></li> 
-        </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a data-toggle="modal" data-target="#signup-modal"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
             <li><a data-toggle="modal" data-target="#login-modal"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
         </ul>
       </div>
     </nav>
-
-    <h1>Welcome!</h1>
-
+    <div class="container-fluid" id="title-position">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 id="title">Wanderlust</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" id="title-position">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 id="title">Wanderlust</h1>
+            </div>
+        </div>
+    </div>
+    <h2 id="quote">Where will you travel next?</h2>
     <div class="modal fade" id="signup-modal" tabindex="-1" role="dialog" aria-labelledby="signup-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

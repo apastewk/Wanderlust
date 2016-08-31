@@ -45,24 +45,6 @@ def check_login(email, hashed_password):
         return False
 
 
-def retrieves_user_trips(session_user_id):
-    """Accesses all of the trips associated with a user."""
-
-    trips_list = []
-
-    all_trips = Trip.query.filter(Trip.user_id == session_user_id).order_by(Trip.start_date).all()
-
-    for trip in all_trips:
-        if trip:
-            start_date = trip.start_date.strftime("%a, %b %d, %Y")
-            end_date = trip.end_date.strftime("%a, %b %d, %Y")
-            trip_detail = (trip.trip_name, start_date, end_date, trip.notes, trip.trip_id)
-            trips_list.append(trip_detail)
-            return trips_list
-        else:
-            return None
-
-
 def add_new_trip_to_db(destination, trip_name, start_date, end_date, notes):
     """Creates a new trip and stores in database."""
 
@@ -78,26 +60,6 @@ def add_new_trip_to_db(destination, trip_name, start_date, end_date, notes):
 
     db.session.add(new_trip)
     db.session.commit()
-
-
-def create_trip_entities_dict(trip_entities):
-    """Converts a list of trip entities into a modified dictionary."""
-
-    trip_entities = [entity.__dict__ for entity in trip_entities]
-
-    for entity in trip_entities:
-        if "_sa_instance_state" in entity:
-            del entity["_sa_instance_state"]
-        if "starts_at" in entity:
-            entity["start_time"] = entity["starts_at"].strftime("%H:%M")
-            entity["starts_at"] = entity["starts_at"].strftime("%a, %b %d, %Y")
-        if "ends_at" in entity:
-            entity["end_time"] = entity["ends_at"].strftime("%H:%M")
-            entity["ends_at"] = entity["ends_at"].strftime("%a, %b %d, %Y")
-        else:
-            continue
-
-    return trip_entities
 
 
 def identify_email_type(parsed_data, trip_id):
