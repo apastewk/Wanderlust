@@ -5,8 +5,8 @@ from model import connect_to_db, User, Trip
 from utility import hash_password, get_trip_entities, modifies_user_trips
 from utility import create_trip_entities_dict, count_user_trips
 from service import create_item, check_login, signup, add_new_trip_to_db
-import flickr
-from xml_parser import worldmate_xml_parser
+from service import identify_users_trip, identify_email_type
+from xml_parser import worldmate_xml_parser, user_parser
 
 
 app = Flask(__name__)
@@ -139,7 +139,8 @@ def trip_details(trip_id):
     return render_template("trip_details.html",
                             trip_id=trip_id,
                             trip_name=trip_name,
-                            trip_entities=trip_entities)
+                            trip_entities=trip_entities,
+                            destination=destination)
 
 
 @app.route("/my_trips/<trip_id>", methods=["POST"])
@@ -159,9 +160,15 @@ def process_incoming_xml():
 
     xml_string = request.data
 
-    worldmate_xml_parser(xml_string)
+    start_date, parsed_data = worldmate_xml_parser(xml_string)
 
+    user_email = user_parser(xml_string)
 
+    trip_id = identify_users_trip(start_date, user_email)
+
+    item_type, item_data = identify_email_type(parsed_data)
+
+    create_item(item_type, item_data, trip_id)
 
 
     ############################################################################

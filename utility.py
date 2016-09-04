@@ -1,13 +1,19 @@
 from operator import attrgetter
-from datetime import datetime, timedelta
-import hashlib, uuid
+from datetime import datetime
+import hashlib
 from model import Trip
+# from xml_parser import worldmate_xml_parser, user_parser
+# from service import identify_email_type, identify_users_trip, create_item
 
 ################################################################################
 
 
 def hash_password(password):
-    """Hashes a users password."""
+    """Hashes a users password.
+
+        >>> hash_password('123456')
+        'f8cdb04495ded4761525'
+    """
 
      # salt = uuid.uuid4().hex
     return hashlib.sha224(password).hexdigest()[:20]
@@ -16,11 +22,8 @@ def hash_password(password):
 def make_datetime_obj(date, time):
     """Combines start_date and start_time form inputs into a datetime object.
 
-    >>> date = 2016-08-26
-    ... time = 18:00
-
-    >>> make_start_datetime_obj()
-    ('2016-08-26' 18:00:00')
+        >>> make_datetime_obj('2016-08-26', '18:00')
+        datetime.datetime(2016, 8, 26, 18, 0)
 
     """
 
@@ -45,7 +48,14 @@ def get_trip_entities(trip):
 
 
 def create_trip_entities_dict(trip_entities):
-    """Converts a list of trip entities into a modified dictionary."""
+    """Converts a list of trip entities into a modified dictionary.
+
+        >>> e1 = Event(event_name = 'Hackbright', starts_at = datetime(2016, 9, 14, 0, 0, 0))
+        >>> m1 = Meeting(meeting_subject = 'Go Karting', starts_at = datetime(2016, 9, 14, 5, 0, 0))
+        >>> trip_entities = [e1, m1]
+        >>> create_trip_entities_dict(trip_entities)
+        [{'event_name': 'Hackbright', 'starts_at': 'Wed, Sep 14, 2016', 'start_time': '00:00'}, {'meeting_subject': 'Go Karting', 'start_time': '05:00', 'starts_at': 'Thu, Sep 29, 2016'}]
+    """
 
     trip_entities = [entity.__dict__ for entity in trip_entities]
 
@@ -65,7 +75,12 @@ def create_trip_entities_dict(trip_entities):
 
 
 def modifies_user_trips(trips):
-    """Accesses all of the trips associated with a user."""
+    """Modifies a users trip start_date and end_date.
+
+        >>> trips = [Trip(user_id=1, trip_id=1, start_date=datetime.strptime("2016-08-10 00:00:00", "%Y-%m-%d %H:%M:%S"), end_date=datetime.strptime("2016-09-20 00:00:00", "%Y-%m-%d %H:%M:%S"), trip_name="Rome", destination="Rome")]
+        >>> modifies_user_trips(trips)
+        [('Rome', 'Wed, Aug 10, 2016', 'Tue, Sep 20, 2016', None, 1)]
+    """
 
     trips_list = []
 
@@ -96,10 +111,32 @@ def count_user_trips(session_user_id):
         if trip.start_date <= todays_date:
             past_trips += 1
             past_trips_list.append(trip)
-
         else:
             future_trips += 1
             future_trips_list.append(trip)
-
     return [(future_trips, past_trips), (future_trips_list, past_trips_list)]
+
+
+# def xml_helper_functions(xml_string):
+
+#     start_date, parsed_data = worldmate_xml_parser(xml_string)
+
+#     user_email = user_parser(xml_string)
+
+#     trip_id = identify_users_trip(start_date, user_email)
+
+#     item_type, item_data = identify_email_type(parsed_data)
+
+#     create_item(item_type, item_data, trip_id)
+
+
+if __name__ == "__main__":
+    import doctest
+
+    print
+    result = doctest.testmod()
+    if not result.failed:
+        print "ALL TESTS PASSED. GOOD WORK!"
+    print
+
 

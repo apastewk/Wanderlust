@@ -1,6 +1,9 @@
 import unittest
 from server import app
 from model import example_data, connect_to_db, db
+from xml_parser import worldmate_xml_parser
+from service import identify_users_trip
+from datetime import datetime
 
 
 class FlaskTests(unittest.TestCase):
@@ -67,14 +70,17 @@ class DatabaseTests(unittest.TestCase):
             result = c.get("/my_trips", follow_redirects=True)
             self.assertIn("Create new trip", result.data)
 
-    def add_new_trip(self):
-        """Tests that a trip is added correctly to database."""
+    # def test_add_new_trip(self):
+    #     """Tests that a trip is added correctly to database."""
 
-        result = self.client.post("/my_trips",
-                                   data={"trip_name": "Rome", "destination": "Rome",
-                                   "start_date": "2016-08-10 00:00:00", "end_date":
-                                   "2016-09-20 00:00:00"}, follow_redirects=True)
-        self.assertIn("Create new trip", result.data)
+    #     with self.client as c:
+    #         with c.session_transaction() as sess:
+    #             sess["logged_in"] = "laurenb@gmail.com"
+    #         result = self.client.post("/my_trips",
+    #                                    data={"trip_name": "Rome", "destination": "Rome",
+    #                                    "start_date": "2016-08-10 00:00:00", "end_date":
+    #                                    "2016-09-20 00:00:00"})
+    #         self.assertIn("Create new trip", result.data)
 
     def test_trip_details(self):
         """Tests a users trip detail page."""
@@ -90,6 +96,13 @@ class DatabaseTests(unittest.TestCase):
                                    "starts_at": "2016-08-26 18:00:00"},
                                    follow_redirects=True)
         self.assertIn("Add an Event", result.data)
+
+    def test_identify_user_trip(self):
+        """Tests to find that there is a trip that matches a users email.""" 
+
+        identify_users_trip(datetime.strptime("2016-08-10 00:00:00", "%Y-%m-%d %H:%M:%S"), "laurenb@gmail.com") 
+
+        assert 1
 
 
 

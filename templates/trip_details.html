@@ -3,7 +3,7 @@
 
 {% block body %}
 
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">WebSiteName</a>
@@ -16,22 +16,29 @@
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
-      </div>
+        </div>
     </nav>
-    <div class="container-fluid">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1 id="trips-list">{{ trip_name }}</h1>
-                </div>
+    <div class="container">
+        <div class="row">
+            <div id="flickr-background"></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-offset-2 col-xs-9">
+                <div id="flickr-image" stlye="height:200px;width:250px;"></div>
             </div>
-            <div class="row">
-                <div class="col-xs-offset-3 col-xs-3">
-                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#event-modal">Add an Event to my Trip</button>
-                </div> 
-                <div class="col-xs-offset-6 col-xs-3">
-                    <a type="button" class="btn btn-info btn-lg" href="/my_trips">Return to My Trips</a>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 id="trips-list">{{ trip_name }}</h1>
+                <input type="hidden" id="flickr" value="{{destination}}"></input>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-offset-3 col-xs-3">
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#event-modal">Add an Event to my Trip</button>
+            </div> 
+            <div class="col-xs-offset-6 col-xs-3">
+                <a type="button" class="btn btn-info btn-lg" href="/my_trips">Return to My Trips</a>
             </div>
         </div>
     </div>
@@ -570,11 +577,15 @@
 
         // FLICKR_KEY = os.environ["FLICKR_KEY"]
         // FLICKR_SECRET = os.environ["FLICKR_SECRET"]
+        // Api key, putting photo
+        // in the right place 
+        var destination = $("#flickr").val();
 
-        $.get("https://api.flickr.com/services/rest/?method=flickr.photos.search&text=calgary&tags=calgary+&tags=+downtown&tags=+skyline&per_page=3&field-trip-confirmationt=json&nojsoncallback=1&api_key=42e04b071b3c85f33c0892cb9bba7560", function(data) {
+        $.get("https://api.flickr.com/services/rest/?method=flickr.photos.search&text=" + destination + "&tags=" + destination + "&tags=+skyline&per_page=3&format=json&nojsoncallback=1&api_key=42e04b071b3c85f33c0892cb9bba7560", function(data) {
+            console.log(data)
             $.each(data.photos.photo, function(i, item) {
                 var photoURL = "http://farm" + item.farm + ".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_c.jpg";
-                $('body').html('<img src='+ photoURL +'/>');
+                $("#flickr-image").html("<img src="+ photoURL +"/>");
             });
         });
 

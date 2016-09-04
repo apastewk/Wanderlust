@@ -62,14 +62,19 @@ def add_new_trip_to_db(destination, trip_name, start_date, end_date, notes):
     db.session.commit()
 
 
-def identify_email_type(parsed_data, trip_id):
-    """Identifies type of email and the data the will be put in the database."""
+def identify_email_type(parsed_data):
+    """Identifies type of email and the data the will be put in the database.
 
-    email_type = parsed_data.keys()[0]
+        >>> parsed_data = {'airpt_code_arr': 'YYC', 'type': 'flight'}
+        >>> identify_email_type(parsed_data)
+        ('flight', {'airpt_code_arr': 'YYC'})
+    """
 
-    item_data = parsed_data[email_type]
+    email_type = parsed_data["type"]
+    del parsed_data["type"]
+    item_data = parsed_data
 
-    create_item(email_type, item_data, trip_id)
+    return (email_type, item_data)
 
 
 def identify_users_trip(start_date, user_email):
@@ -80,7 +85,7 @@ def identify_users_trip(start_date, user_email):
         user_id = user.user_id
 
     trip = Trip.query.filter(and_(Trip.start_date <= start_date, Trip.end_date >= start_date, Trip.user_id == user_id)).first()
- 
+
     if trip is not None:
         return trip.trip_id
 
@@ -101,6 +106,7 @@ def create_item(item_type, item_data, trip_id):
     for key in item_data:
         if item_data[key]:
             if key == "start-date":
+                print type(item_data["start-date"])
                 instance.starts_at = make_datetime_obj(item_data["start-date"], item_data["start-time"])
             elif key == "end-date":
                 instance.ends_at = make_datetime_obj(item_data["end-date"], item_data["end-time"])
@@ -113,4 +119,16 @@ def create_item(item_type, item_data, trip_id):
 
     db.session.add(instance)
     db.session.commit()
+
+
+
+if __name__ == "__main__":
+    import doctest
+
+    print
+    result = doctest.testmod()
+    if not result.failed:
+        print "ALL TESTS PASSED. GOOD WORK!"
+    print
+
 

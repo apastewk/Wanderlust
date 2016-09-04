@@ -1,0 +1,87 @@
+#my-trips {
+    text-align: center;
+    font-size: 60px;
+    color: white;
+}
+
+#my-trips-position {
+    top: 25%;
+    left: 0;
+    line-height: 200px;
+    margin: auto;
+    margin-top: -100px;
+    position: absolute;
+    width: 100%
+}
+
+#trips-list {
+    text-align: center;
+}
+
+#sunset {
+    background-image: url("/static/css/sunset.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 1000px;
+    background-color: black;
+}
+
+/*#flickr-image {
+    height:25px;
+    width: 500px;
+
+}*/
+
+#flickr-background {
+    background-color: black;
+}
+
+#lake {
+    background-image: url("/static/css/sydney.jpg");
+    height: 400px;
+    width: 1446px;
+    background-repeat: no-repeat;
+    background-size: 1500px 400px;
+}
+
+#title {
+    font-family: "Courier New", monospace;
+    text-align: center;
+    font-size: 80px;
+    color: white;
+}
+
+#title-position {
+    top: 40%;
+    left: 0;
+    line-height: 200px;
+    margin: auto;
+    margin-top: -100px;
+    position: absolute;
+    width: 100%
+}
+
+#nav-title {
+    font-family: "Courier New", monospace;
+    font-size: 40px;
+}
+
+#quote {
+    text-align: center;
+    font-size: 30px;
+    color: white;
+    top: 45%;
+    left: 0;
+    line-height: 200px;
+    margin: auto;
+    margin-top: -100px;
+    position: absolute;
+    width: 100%
+}
+
+#table-position {
+    top: 45%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
