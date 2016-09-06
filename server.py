@@ -69,8 +69,6 @@ def logout():
 
     session["logged_in"] = None
 
-    flash("You are now logged out.")
-
     return redirect("/")
 
 

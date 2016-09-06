@@ -3,14 +3,16 @@
 
 {% block body %}
 
-    <div id="sunset"></div>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <ul class="nav navbar-nav navbar-right">
-            <li><a data-toggle="modal" data-target="#signup-modal"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-            <li><a data-toggle="modal" data-target="#login-modal"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-        </ul>
-      </div>
+        <div class="container">
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a data-toggle="modal" data-target="#signup-modal" class="navbar-text"><span class="glyphicon glyphicon-user"></span> SIGN UP</a></li>
+                <li><a data-toggle="modal" data-target="#login-modal" class="navbar-text"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a></li>
+            </ul>
+            </div>
+        </div>
+        </div>
     </nav>
     <div class="container-fluid" id="title-position">
         <div class="row">
@@ -19,6 +21,7 @@
             </div>
         </div>
     </div>
+    <div id="sunset"></div>
     <div class="container-fluid" id="title-position">
         <div class="row">
             <div class="col-xs-12">
@@ -32,32 +35,30 @@
             <div class="modal-content">
                 <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                <h4 class="modal-title" id="myModalLabel">Sign Up for an Account</h4>
+                <h4 class="modal-title" id="signup-text">Sign Up for an Account</h4>
                 </div>
                 <div class="modal-body">
                     <form action="/signup" method="POST" role="form">
                         <div class="form-group">
-                            <label for="field-firstname">First Name*: </label>
-                            <input type="text" name="firstname" placeholder="Enter your first name" id-="field-firstname" required>
+                            <label for="field-firstname"></label>
+                            <input type="text" name="firstname" placeholder="First Name" id="field-firstname" required>
                         </div>
                         <br>
                         <div class="form-group">
-                            <label for="field-lastname">Last Name*: </label>
-                            <input type="text" name="lastname" placeholder="Enter your last name" id-="field-lastname" required>
+                            <label for="field-lastname"></label>
+                            <input type="text" name="lastname" placeholder="Last Name" id="field-lastname" required>
                         </div>
                         <br>
                         <div class="form-group">
-                            <label for="field-signup-email">Email Address*: </label>
-                            <input type="text" name="email" placeholder="Enter your email" id-="field-signup-email" required>
+                            <label for="field-signup-email"></label>
+                            <input type="text" name="email" placeholder="Email Address" id="field-signup-email" required>
                         </div>
                         <br>
                         <div class="form-group">
-                            <label for="field-signup-password">Password*: </label>
-                            <input type="password" name="password" placeholder="Enter your password" id-="field-signup-password" required>
+                            <label for="field-signup-password"></label>
+                            <input type="password" name="password" placeholder="Password" id="field-signup-password" required>
                         </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" value="Sign Up Now" class="btn btn-primary">
+                        <input type="submit" value="Sign Up Now" class="btn btn-primary" id="submit-button">
                     </form>
                 </div>
             </div>
@@ -68,23 +69,39 @@
             <div class="modal-content">
                 <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                <h4 class="modal-title" id="myModalLabel">Login to Your Account</h4>
+                <h4 class="modal-title" id="login-text">Login to Your Account</h4>
                 </div>
                 <div class="modal-body">
                     <form action="/login" method="POST" role="form">
                         <div class="form-group">
-                            <label for="field-login-email">Email Address: </label>
-                            <input type="text" name="email" placeholder="Enter your email" id-="field-login-email" required>
+                            <label for="field-login-email"></label>
+                            <input type="text" name="email" placeholder="Email Address" id="field-login-email" required>
                         </div>
                         <br>
                         <div class="form-group">
-                            <label for="field-login-password">Password: </label>
-                            <input type="password" name="password" placeholder="Enter your password" id-="field-login-password" required>
+                            <label for="field-login-password"></label>
+                            <input type="password" name="password" placeholder="Password" id="field-login-password" required>
                         </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" value="Login" class="btn btn-primary">
+                        <input type="submit" value="Login" class="btn btn-primary btn-block" id="submit-button">
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron" id="details">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-offset-2 col-xs-8">
+                    <div class="detailed-steps">
+                        <div class="glyphicon glyphicon-plane"></div>
+                        <p class="detailed-words">1. Create a Trip</p>
+                        <br>
+                        <div class="glyphicon glyphicon-envelope"></div>
+                        <p class="detailed-words">2. Forward your Confirmation Emails</p>
+                        <br>
+                        <div class="glyphicon glyphicon-eye-open"></div>
+                        <p class="detailed-words">3. Access your Itinerary</p>
+                    </div>
                 </div>
             </div>
         </div>

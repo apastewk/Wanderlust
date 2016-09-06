@@ -3,250 +3,399 @@
 
 {% block body %}
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">WebSiteName</a>
+    <div class="jumbotron" id="flickr-image">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="col-offset-xs-3 col-xs-2">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" id="nav-title" href="/">Wanderlust</a>
+                    </div>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/my_trips" class="navbar-text"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+                    <li><a href="/logout" class="navbar-text"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                </ul>
             </div>
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#">Page 1</a></li>
-              <li><a href="#">Page 2</a></li> 
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-            </ul>
-        </div>
-    </nav>
-    <div class="container">
-        <div class="row">
-            <div id="flickr-background"></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-offset-2 col-xs-9">
-                <div id="flickr-image" stlye="height:200px;width:250px;"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h1 id="trips-list">{{ trip_name }}</h1>
-                <input type="hidden" id="flickr" value="{{destination}}"></input>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-offset-3 col-xs-3">
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#event-modal">Add an Event to my Trip</button>
-            </div> 
-            <div class="col-xs-offset-6 col-xs-3">
-                <a type="button" class="btn btn-info btn-lg" href="/my_trips">Return to My Trips</a>
+        </nav>
+        <div class="container" id="trips-position">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 id="trips-list">{{ trip_name }}</h1>
+                    <input type="hidden" id="flickr" value="{{destination}}"></input>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="container">
-    <div class="row">
-    <div class="col-xs-offset-2 col-xs-8">
-    <div class="panel panel-default">
-        {% for entity in trip_entities %}
-            {% if entity["starts_at"] %}
-            <div class="panel-heading">
-                <h2>{{ entity["starts_at"] }}</h2>
+    <div class="container" id="nav-buttons">
+        <div class="row">
+            <div class="col-xs-offset-2 col-xs-8">
+                <div class="panel panel-default">
+                    {% for entity in trip_entities %}
+                        {% if entity["starts_at"] %}
+                            <div class="panel-heading">
+                                <h3>{{ entity["starts_at"] }}<a style="float:right" id="add-event" data-toggle="modal" data-target="#event-modal">+ Add Event</a></h3>
+                            </div>
+                            {% if entity["flight_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["start_time"] }}</h3>
+                                            <h5>DEPART</h5>
+                                        </div>
+                                        <div class="col-xs-6"> 
+                                            <h3 class="itinerary-center"><span class="glyphicon glyphicon-plane"></span> Depart from {{ entity["departs_from"] }} ({{ entity["airpt_code_dep"] }})</h3>
+                                            <h5 class="itinerary-center">{{ entity["airline"] }} {{ entity["flight_num"] }} to {{ entity["arrives_to"] }} ({{ entity["airpt_code_arr"] }}) - Duration: {{ entity["duration"] }}</h5>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <h3 class="itinerary-right">{{ entity["confirmation_num"] }}</h3>
+                                            <h5 class="itinerary-right">CONFIRMATION</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="details-button">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <div class="col-xs-6">
+                                                    <h4>Flight Details</h4>
+                                                    <div>Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
+                                                    <div>Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
+                                                    <div>Duration: {{ entity["duration"] }}</div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <h4>Booking Details</h4>
+                                                    <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                                                    <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if entity["hotel_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["start_time"] }}</h3>
+                                            <h5>CHECK-IN</h5> 
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h3 class="itinerary-center"><span class="glyphicon glyphicon-home"></span> {{ entity["hotel_name"] }}</h3>
+                                            <h5 class="itinerary-center">{{ entity["address"] }}</h5>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <h3 class="itinerary-right">{{ entity["confirmation_num"] }}</h3>
+                                            <h5 class="itinerary-right">CONFIRMATION</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="details-button">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <div class="col-xs-6">
+                                                    <h4>Hotel Details</h4>
+                                                    <div>Check-in: {{ entity["start_time"] }}</div>
+                                                    <div>Check-out: {{ entity["end_time"] }}</div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <h4>Booking Details</h4>
+                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                    <div>Type of room: {{ entity["room_type"] }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if entity["rental_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["start_time"] }}</h3>
+                                            <h5>PICK-UP</h5>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h3 class="intinerary-center"><span class="glyphicon glyphicon-random"></span> {{ entity["agency_name"] }}</h3>
+                                            <h5>{{ entity["pickup_from"] }}</h5>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <h3 class="itinerary-right">{{ entity["confirmation_num"] }}</h3>
+                                            <h5 class="itinerary-right">CONFIRMATION</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="details-button">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <div class="col-xs-6">
+                                                    <h4>Rental Agency Details</h4>
+                                                    <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
+                                                    <div class="core_details">Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <h4>Booking Details</h4>
+                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                    <div>Car Type: {{ entity["car_type"] }}</div>
+                                                    <div>Driver: {{ entity["drivers_name"] }}</div>
+                                                    <div>Rewards #: {{ entity["rewards_num"] }}</div> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if entity["vendor_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["start_time"] }}</h3>
+                                            <h5>DEPART</h5>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h3 class="itinerary-center"><span class="glyphicon glyphicon-road"></span> Depart from {{ entity["departs_from"] }}</h3>
+                                            <h5 class="itinerary-center">{{ entity["vendor_name"] }} {{ entity["transport_num"] }}</h5>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <h3 class="itinerary-right">{{ entity["confirmation_num"] }}</h3>
+                                            <h5 class="itinerary-right">CONFIRMATION</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="details-button">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <div class="col-xs-6">
+                                                    <h4>Vendor Details</h4>
+                                                    <div>Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
+                                                    <div>Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <h4>Booking Details</h4>
+                                                    <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                                                    <div class="core_details">Travelers Name: {{ entity["travelers_name"] }}</div> 
+                                                    <div class="core_details">Duration: {{ entity["duration"] }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if entity["event_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["start_time"] }}</h3>
+                                            <h5>START TIME</h5>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h3 class="itinerary-center"><span class="glyphicon glyphicon-camera"></span> {{ entity["event_name"] }} </h3>
+                                            <h5 class="itinerary-center">{{ entity["address"] }}</h5>
+                                        </div>
+                                        <div class="col-xs-3"> 
+                                            <h3 class="itinerary-right">{{ entity["confirmation_num"] }}</h3>
+                                            <h5 class="itinerary-right">CONFIRMATION</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="details-button">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <div class="col-xs-6">
+                                                    <h4>Event Details</h4>
+                                                    <div>Start Time: {{ entity["start_time"] }}</div>
+                                                    <div>Address: {{ entity["address"] }}</div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <h4>Booking Details</h4>
+                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if entity["meeting_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["start_time"] }}</h3>
+                                            <h5>START TIME</h5>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h3 class="itinerary-center"><span class="glyphicon glyphicon-briefcase"></span> {{ entity["meeting_subject"] }}</h3>
+                                            <h5 class="itinerary-center">{{ entity["address"] }}</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-offset-xs-3 col-xs-6">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <h4>Meeting Details</h4>
+                                                <div>Start Time: {{ entity["start_time"] }}</div>
+                                                <div>Address: {{ entity["address"] }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        {% if entity["ends_at"] %}
+                            <div class="panel-heading">
+                                <h3>{{ entity["ends_at"] }}</h3>
+                            </div>
+                            {% if entity["flight_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["end_time"] }}</h3> 
+                                            <h5>ARRIVE</h5>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h3 class="itinerary-center"><span class="glyphicon glyphicon-plane"></span> Arrive in {{ entity["arrives_to"] }} ({{ entity["airpt_code_arr"] }})</h3>
+                                            <h5 class="itinerary-center">{{ entity["airline"] }} {{ entity["flight_num"] }}</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="details-button">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <div class="col-xs-6">
+                                                    <h4>Booking Details</h4>
+                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                    <div>Rewards #: {{ entity["rewards_num"] }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if entity["hotel_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["end_time"] }}</h3>
+                                            <h5>CHECK-OUT</h5>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h3 class="itinerary-center"><span class="glyphicon glyphicon-home"></span> {{ entity["hotel_name"] }}</h3>
+                                            <h5 class="itinerary-center">{{ entity["address"] }}</h5>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <h3 class="itinerary-right">{{ entity["confirmation_num"] }}</h3>
+                                            <h5 class="itinerary-right">CONFIRMATION</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="details-button">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <div class="col-xs-6">
+                                                    <h4>Hotel Details</h4>
+                                                    <div class="core_details">Check-in: {{ entity["start_time"] }}</div>
+                                                    <div class="core_details">Check-out: {{ entity["end_time"] }}</div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <h4>Booking Details</h4>
+                                                    <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                                                   <div class="core_details">Type of room: {{ entity["room_type"] }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if entity["rental_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["end_time"] }}</h3>
+                                            <h5>DROP-OFF</h5>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h3 class="itinerary-center"><span class="glyphicon glyphicon-random"></span> {{ entity["agency_name"] }}</h3>
+                                            <h5 class="itinerary-center">{{ entity["dropoff_to"] }}</h5>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <h3 class="itinerary-right">{{ entity["confirmation_num"] }}</h3>
+                                            <h5 class="itinerary-right">CONFIRMATION</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="details-button">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <div class="col-xs-6">
+                                                    <h4>Rental Agency Details</h4>
+                                                    <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
+                                                    <div>Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div class="core_details">
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <h4>Booking Details</h4>
+                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                    <div>Car Type: {{ entity["car_type"] }}</div>
+                                                    <div>Driver: {{ entity["drivers_name"] }}</div>
+                                                    <div>Rewards #: {{ entity["rewards_num"] }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if entity["vendor_id"] %}
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <h3>{{ entity["end_time"] }}</h3>
+                                            <h5>ARRIVE</h5>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h3 class="itinerary-center"><span class="glyphicon glyphicon-road"></span> Arrive in {{ entity["arrives_to"] }}</h3>
+                                            <h5 class="itinerary-center">{{ entity["vendor_name"] }} {{ entity["transport_num"] }}</h5>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="details-button">
+                                            <button class="toggle">Show more details</button>
+                                            <div class="wrapper" style="display: none;">
+                                                <div class="col-xs-6">
+                                                    <h4>Booking Details</h4>
+                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                    <div>Travelers Name: {{ entity["travelers_name"] }}</div> 
+                                                    <div>Duration: {{ entity["duration"] }}</div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
-                {% if entity["flight_id"] %}
-                <div class="panel-body">
-                    <h3>{{ entity["start_time"] }}</h3>
-                    <h4>DEPART</h4> 
-                    <h3>Depart from {{ entity["departs_from"] }} ({{ entity["airpt_code_dep"] }}) Confirmation #: {{ entity["confirmation_num"] }}</h3>
-                    <div class="core_details">{{ entity["airline"] }} {{ entity["flight_num"] }} to {{ entity["arrives_to"] }} ({{ entity["airpt_code_arr"] }}) - Duration: {{ entity["duration"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Flight Details</h4>
-                        <div class="core_details">Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
-                        <div class="core_details">Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
-                        <div class="core_details">Duration: {{ entity["duration"] }}</div>
-                        <h4>Booking Details</h4>
-                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                        <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div>
-                    </div>
-                </div>
-                {% endif %}
-                {% if entity["hotel_id"] %}
-                <div class="panel-body">
-                    <h3>{{ entity["start_time"] }}</h3>
-                    <h4>CHECK-IN</h4> 
-                    <h3>{{ entity["hotel_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
-                    <div class="core_details">{{ entity["address"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Hotel Details</h4>
-                        <div class="core_details">Check-in: {{ entity["start_time"] }}</div>
-                        <div class="core_details">Check-out: {{ entity["end_time"] }}</div>
-                        <h4>Booking Details</h4>
-                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                        <div class="core_details">Type of room: {{ entity["room_type"] }}</div>
-                    </div>
-                </div>
-                {% endif %}
-                {% if entity["rental_id"] %}
-                <div class="panel-body">
-                    <h3>{{ entity["start_time"] }}</h3>
-                    <h4>PICK-UP</h4>
-                    <h3>{{ entity["agency_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
-                    <div class="core_details">{{ entity["pickup_from"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Rental Agency Details</h4>
-                        <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
-                        <div class="core_details">Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div>
-                        <h4>Booking Details</h4>
-                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                        <div class="core_details">Car Type: {{ entity["car_type"] }}</div>
-                        <div class="core_details">Driver: {{ entity["drivers_name"] }}</div>
-                        <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div> 
-                    </div>
-                </div>
-                {% endif %}
-                {% if entity["vendor_id"] %}
-                <div class="panel-body">
-                    <h3>{{ entity["start_time"] }}</h3>
-                    <h4>DEPART</h4>
-                    <h3>Depart from {{ entity["departs_from"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
-                    <div class="core_details">{{ entity["vendor_name"] }} {{ entity["transport_num"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Vendor Details</h4>
-                        <div class="core_details">Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
-                        <div class="core_details">Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
-                        <h4>Booking Details</h4>
-                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                        <div class="core_details">Travelers Name: {{ entity["travelers_name"] }}</div> 
-                        <div class="core_details">Duration: {{ entity["duration"] }}</div>
-                    </div>
-                </div>
-                {% endif %}
-                {% if entity["event_id"] %}
-                 <div class="panel-body">
-                    <h3>{{ entity["start_time"] }}</h3>
-                    <h4>START TIME</h4>
-                    <h3>{{ entity["event_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
-                    <div class="core_details">{{ entity["address"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Event Details</h4>
-                        <div class="core_details">Start Time: {{ entity["start_time"] }}</div>
-                        <div class="core_details">Address: {{ entity["address"] }}</div>
-                        <h4>Booking Details</h4>
-                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                    </div>
-                </div>
-                {% endif %}
-                {% if entity["meeting_id"] %}
-                <div class="panel-body">
-                    <h3>{{ entity["start_time"] }}</h3>
-                    <h4>START TIME</h4>
-                    <h3>{{ entity["meeting_subject"] }}</h3>
-                    <div class="core_details">{{ entity["address"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Meeting Details</h4>
-                        <div class="core_details">Start Time: {{ entity["start_time"] }}</div>
-                        <div class="core_details">Address: {{ entity["address"] }}</div>
-                    </div>
-                </div>
-                {% endif %}
-            {% endif %}
-    
-        <div class="panel-heading">
-            {% if entity["ends_at"] %}
-                <h2>{{ entity["ends_at"] }}</h2>
-            </div>
-            <div class="panel-body">
-                {% if entity["flight_id"] %}
-                    <h3>{{ entity["end_time"] }}</h3> 
-                    <h4>ARRIVE</h4> 
-                    <h3>Arrive in {{ entity["arrives_to"] }} ({{ entity["airpt_code_arr"] }})</h3>
-                    <div class="core_details">{{ entity["airline"] }} {{ entity["flight_num"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Booking Details</h4>
-                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                        <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div>
-                    </div>
-                {% endif %}
-                {% if entity["hotel_id"] %}
-                    <h3>{{ entity["end_time"] }}</h3>
-                    <h4>CHECK-OUT</h4> 
-                    <h3>{{ entity["hotel_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
-                    <div class="core_details">{{ entity["address"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Hotel Details</h4>
-                        <div class="core_details">Check-in: {{ entity["start_time"] }}</div>
-                        <div class="core_details">Check-out: {{ entity["end_time"] }}</div>
-                        <h4>Booking Details</h4>
-                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                       <div class="core_details">Type of room: {{ entity["room_type"] }}</div>
-                    </div>
-                {% endif %}
-                {% if entity["rental_id"] %}
-                    <h3>{{ entity["end_time"] }}</h3>
-                    <h4>DROP-OFF</h4>
-                    <h3>{{ entity["agency_name"] }} Confirmation #: {{ entity["confirmation_num"] }}</h3>
-                    <div class="core_details">{{ entity["dropoff_to"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Rental Agency Details</h4>
-                        <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
-                        <div>Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div class="core_details">
-                        <h4>Booking Details</h4>
-                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                        <div class="core_details">Car Type: {{ entity["car_type"] }}</div>
-                        <div class="core_details">Driver: {{ entity["drivers_name"] }}</div>
-                        <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div> 
-                    </div>
-                {% endif %}
-                {% if entity["vendor_id"] %}
-                    <h3>{{ entity["end_time"] }}</h3>
-                    <h4>ARRIVE</h4>
-                    <h3>Arrive in {{ entity["arrives_to"] }}</h3>
-                    <div class="core_details">{{ entity["vendor_name"] }} {{ entity["transport_num"] }}</div>
-                    <br>
-                    <button class="toggle">Show more details</button>
-                    <div class="wrapper" style="display: none;">
-                        <h4>Booking Details</h4>
-                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                        <div class="core_details">Travelers Name: {{ entity["travelers_name"] }}</div> 
-                        <div class="core_details">Duration: {{ entity["duration"] }}</div> 
-                    </div>
-                {% endif %}
-            {% endif %}
         </div>
-        {% endfor %}
-    </div>
-    </div>
     </div>
     <div class="modal fade" id="event-modal" tabindex="-1" role="dialog" aria-labelledby="event-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                <h3 class="modal-title" id="myModalLabel">Please choose an event</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 class="modal-title" id="event-dropdown">Please Choose an Event</h3>
                 </div>
                 <div class="modal-body">
                     <form action="/my_trips" method="POST" role="form">
                         <div class="form-group">
                             <h2 id="choose-event">
                             <label for="field-trip-confirmation"></label>
-                            <select name="trip=confirmation" id="field-trip-confirmation">
+                            <select name="trip-confirmation" id="field-trip-confirmation">
                                 <option value="choose-a-confirmation">Choose a Confirmation</option>
                                 <option value="flight" id="flight-button">Flight</option>
                                 <option value="hotel" id="hotel-button">Hotel</option>
@@ -255,319 +404,439 @@
                                 <option value="event" id="event-button">Event</option>
                                 <option value="meeting" id="meeting-button">Meeting</option>
                             </select>
-                        </h2>
+                            </h2>
                         </div>
                     </form>
-                    <br>
+                </div>
                     <div class="form-event" id="flight" hidden>
                         <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
-                            <div class="form-group">
-                                <label for="field-airline">Airline: </label>
-                                <input type="text" name="airline" placeholder="Enter the airlines" id="field-airline">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-number">Flight Number: </label>
-                                <input type="text" name="flight_num" placeholder="Enter the flight #" id="field-flight-number">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-confirmation-number">Confirmation Number: </label>
-                                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-flight-confirmation-number">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-departure-city">Departure City: </label>
-                                <input type="text" name="departs_from" placeholder="Enter the departure city" id="field-flight-departure-city">  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-departure-airport-code">Departure City Airport Code: </label>
-                                <input type="text" name="airpt_code_dep" placeholder="Enter the airport code" id="field-departure-airport-code">  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-departure-date">Departure Date: </label>
-                                <input type="date" name="start-date" placeholder="Enter the departure date" id="field-flight-depature-date" required>  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-departure-time">Departure Time: </label>
-                                <input type="time" name="start-time" placeholder="Enter the departure time" value="00:00" id="field-flight-departure-time">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-arrival-city">Arrival City: </label>
-                                <input type="text" name="arrives_to" placeholder="Enter the arrival city" id="field-flight-arrival-city">   
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-arrival-airport-code">Arrival City Airport Code: </label>
-                                <input type="text" name="airpt_code_arr" placeholder="Enter the airport code" id="field-arrival-airport-code">  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-arrival-date">Arrival Date: </label>
-                                <input type="date" name="end-date" placeholder="Enter the arrival date" id="field-flight-arrival-date" required>  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-arrival-time">Arrival Time: </label>
-                                <input type="time" name="end-time" placeholder="Enter the arrival time" value="00:00" id="field-flight-arrival-time">   
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-duration">Duration of Flight: </label>
-                                <input type="text" name="flight-duration" placeholder="Enter the duration" id="field-flight-duration">  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-flight-rewards-number">Rewards Number: </label>
-                                <input type="text" name="rewards_num" placeholder="Enter your rewards #" id="field-flight-rewards-number">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <input type="submit" value="Add Trip Details">
-                                <input type="hidden" value="flight" name="ftype">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-airline">Airline: </label>
+                                            <input type="text" name="airline" id="field-airline" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-number">Flight Number: </label>
+                                            <input type="text" name="flight_num" id="field-flight-number" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-confirmation-number">Confirmation Number: </label>
+                                            <input type="text" name="confirmation_num" id="field-flight-confirmation-number" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-duration">Duration of Flight: </label>
+                                            <input type="text" name="flight-duration" id="field-flight-duration" class="input-size">  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-departure-city">Departure City: </label>
+                                            <input type="text" name="departs_from" id="field-flight-departure-city" class="input-size">  
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-departure-airport-code">Departure City Airport Code: </label>
+                                            <input type="text" name="airpt_code_dep" id="field-departure-airport-code" class="input-size">  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-departure-date">Departure Date: </label>
+                                            <input type="date" name="start-date" id="field-flight-depature-date" class="input-size" required>  
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-departure-time">Departure Time: </label>
+                                            <input type="time" name="start-time" value="00:00" id="field-flight-departure-time" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-arrival-city">Arrival City: </label>
+                                            <input type="text" name="arrives_to" placeholder="Arrival City" id="field-flight-arrival-city" class="input-size">   
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-arrival-airport-code">Arrival City Airport Code: </label>
+                                            <input type="text" name="airpt_code_arr" placeholder="Arrival Code" id="field-arrival-airport-code" class="input-size">  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-arrival-date">Arrival Date: </label>
+                                            <input type="date" name="end-date" placeholder="Arrival Date" id="field-flight-arrival-date" class="input-size" required>  
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-arrival-time">Arrival Time: </label>
+                                            <input type="time" name="end-time" placeholder="Arrival Time" value="00:00" id="field-flight-arrival-time" class="input-size">   
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-flight-rewards-number">Rewards Number: </label>
+                                            <input type="text" name="rewards_num" placeholder="Rewards Number" id="field-flight-rewards-number" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="hidden" value="flight" name="ftype">
+                                </div>
                             </div>
                         </form>
                     </div>
                     <div class="form-event" id="hotel" hidden>
                         <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
-                            <div class="form-group">
-                                <label for="field-hotel-name">Hotel Name: </label>
-                                <input type="text" name="hotel_name" placeholder="Enter the hotel-name" id="field-hotel-name">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-hotel-address">Hotel Address: </label>
-                                <input type="text" name="address" placeholder="Enter the address" id="field-hotel-address">  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-hotel-confirmation-number">Confirmation Number: </label>
-                                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-hotel-confirmation-number">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-hotel-arrival-date">Arrival Date: </label>
-                                <input type="date" name="start-date" placeholder="Enter the arrival date" id="field-arrival-date" required>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-hotel-arrival-time">Arrival Time: </label>
-                                <input type="time" name="start-time" placeholder="Enter the arrival time" value="00:00" id="field-arrival-time">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-hotel-departure-date">Departure Date: </label>
-                                <input type="date" name="end-date" placeholder="Enter the departure date" id="field-hotel-departure-date" required>  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-hotel-departure-time">Departure Time: </label>
-                                <input type="time" name="end-time" placeholder="Enter the departure time" value="00:00" id="field-departure-time">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-room-type">Type of Room: </label>
-                                <input type="text" name="room_type" placeholder="Enter the type of room" id="field-room-type">  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <input type="submit" value="Add Trip Details">
-                                <input type="hidden" value="hotel" name="ftype">
-                            </div>
-                        </form>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-hotel-name">Hotel Name: </label>
+                                            <input type="text" name="hotel_name" placeholder="Enter the hotel-name" id="field-hotel-name" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-hotel-address">Hotel Address: </label>
+                                            <input type="text" name="address" placeholder="Enter the address" id="field-hotel-address" class="input-size">  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-hotel-confirmation-number">Confirmation Number: </label>
+                                            <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-hotel-confirmation-number" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                         <div class="form-group">
+                                            <label for="field-room-type">Type of Room: </label>
+                                            <input type="text" name="room_type" placeholder="Enter the type of room" id="field-room-type" class="input-size">  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-hotel-arrival-date">Arrival Date: </label>
+                                            <input type="date" name="start-date" placeholder="Enter the arrival date" id="field-arrival-date" class="input-size" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-hotel-arrival-time">Arrival Time: </label>
+                                            <input type="time" name="start-time" placeholder="Enter the arrival time" value="00:00" id="field-arrival-time" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-hotel-departure-date">Departure Date: </label>
+                                            <input type="date" name="end-date" placeholder="Enter the departure date" id="field-hotel-departure-date" class="input-size" required>  
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-hotel-departure-time">Departure Time: </label>
+                                            <input type="time" name="end-time" placeholder="Enter the departure time" value="00:00" id="field-departure-time" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="hidden" value="hotel" name="ftype">
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="form-event" id="car-rental" hidden>
                         <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
-                            <div class="form-group">
-                                <label for="field-agency-name">Car Agency Name: </label>
-                                <input type="text" name="agency_name" placeholder="Enter the agency-name" id="field-agency-name">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-car-confirmation-number">Confirmation Number: </label>
-                                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-car-confirmation-number">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-car-type">Car Type: </label>
-                                <input type="text" name="car_type" placeholder="Enter the confirmation #" id="field-car-type">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-pickup-location">Pick-Up Location: </label>
-                                <input type="text" name="pickup_from" placeholder="Enter the pickup location" id="field-pickup-location">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-pickup-time">Pick-Up Time: </label>
-                                <input type="time" name="start-time" placeholder="Enter the pickup time" value="00:00" id="field-pickup-time">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-pickup-date">Pick-Up Date: </label>
-                                <input type="date" name="start-date" placeholder="Enter the pickup date" id="field-pickup-date" required>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-dropoff-location">Drop-Off Location: </label>
-                                <input type="text" name="dropoff_at" placeholder="Enter the dropoff location" id="field-dropoff-location">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-dropoff-time">Drop-Off Time: </label>
-                                <input type="time" name="end-time" placeholder="Enter the dropoff time" value="00:00" id="field-dropoff-time">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-dropoff-date">Drop-Off Date: </label>
-                                <input type="date" name="end-date" placeholder="Enter the dropoff date" id="field-dropoff-date" required>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-drivers-name">Driver Name: </label>
-                                <input type="text" name="drivers-name" placeholder="Enter the drivers name" id="field-drivers-name">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-car-rental-rewards-number">Rewards Number: </label>
-                                <input type="text" name="rewards-num" placeholder="Enter your rewards #" id="field-car-rental-rewards-number">
-                            </div>
-                            <div class="form-group">
-                                <input type="submit" value="Add Trip Details">
-                                <input type="hidden" value="car-rental" name="ftype">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-agency-name">Car Agency Name: </label>
+                                            <input type="text" name="agency_name" placeholder="Enter the agency-name" id="field-agency-name" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-car-confirmation-number">Confirmation Number: </label>
+                                            <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-car-confirmation-number" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-car-type">Car Type: </label>
+                                            <input type="text" name="car_type" placeholder="Enter the confirmation #" id="field-car-type" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-pickup-location">Pick-Up Location: </label>
+                                            <input type="text" name="pickup_from" placeholder="Enter the pickup location" id="field-pickup-location" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-pickup-time">Pick-Up Time: </label>
+                                            <input type="time" name="start-time" placeholder="Enter the pickup time" value="00:00" id="field-pickup-time" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-pickup-date">Pick-Up Date: </label>
+                                            <input type="date" name="start-date" placeholder="Enter the pickup date" id="field-pickup-date" class="input-size" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-dropoff-time">Drop-Off Time: </label>
+                                            <input type="time" name="end-time" placeholder="Enter the dropoff time" value="00:00" id="field-dropoff-time" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-dropoff-date">Drop-Off Date: </label>
+                                            <input type="date" name="end-date" placeholder="Enter the dropoff date" id="field-dropoff-date" class="input-size" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-dropoff-location">Drop-Off Location: </label>
+                                            <input type="text" name="dropoff_at" placeholder="Enter the dropoff location" id="field-dropoff-location" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-drivers-name">Driver Name: </label>
+                                            <input type="text" name="drivers-name" placeholder="Enter the drivers name" id="field-drivers-name" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-car-rental-rewards-number">Rewards Number: </label>
+                                            <input type="text" name="rewards-num" placeholder="Enter your rewards #" id="field-car-rental-rewards-number" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="hidden" value="car-rental" name="ftype">
+                                </div>
                             </div>
                         </form>
                     </div>
                     <div class="form-event" id="public-transportation" hidden>
                         <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
-                            <div class="form-group">
-                                <label for="field-vendor-name">Vendor Name: </label>
-                                <input type="text" name="vendor_name" placeholder="Enter the vendor name" id="field-vendor-name">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-vendor-confirmation-number">Confirmation Number: </label>
-                                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-vendor-confirmation-number">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-vendor-departure-location">Departure Location: </label>
-                                <input type="text" name="departs_from" placeholder="Enter the departure location" id="field-vendor-departure-location">  
-                            </div>
-                            <br>
-                             <div class="form-group">
-                                <label for="field-vendor-departure-date">Departure Date: </label>
-                                <input type="date" name="start-date" placeholder="Enter the departure date" id="field-vendor-departure-date" required>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-vendor-departure-time">Departure Time: </label>
-                                <input type="time" name="start-time" placeholder="Enter the departure time" value="00:00" id="field-vendor-departure-time">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-vendor-arrival-location">Arrival Location: </label>
-                                <input type="text" name="arrives_to" placeholder="Enter the arrival location" id="field-vendor-arrival-location">   
-                            </div>
-                            <br>
-                               <div class="form-group">
-                                <label for="field-vendor-arrival-date">Arrival Date: </label>
-                                <input type="date" name="end-date" placeholder="Enter the arrival date" id="field-vendor-arrival-date" required>   
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-vendor-arrival-time">Arrival Time: </label>
-                                <input type="time" name="end-time" placeholder="Enter the arrival time" value="00:00" id="field-vendor-arrival-time">   
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-travelers_name">Name of Traveler: </label>
-                                <input type="text" name="travelers-name" placeholder="Enter the travelers name" id="field-travelers-name">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-public-trans-duration">Duration: </label>
-                                <input type="text" name="public-trans-duration" placeholder="Enter the duration" id="field-public-trans-duration">  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-public-trans-num">Train/Bus #: </label>
-                                <input type="text" name="public-trans-num" placeholder="Enter the train/bus #" id="field-public-trans-num">  
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <input type="submit" value="Add Trip Details">
-                                 <input type="hidden" value="public-transportation" name="ftype">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-vendor-name">Vendor Name: </label>
+                                            <input type="text" name="vendor_name" placeholder="Enter the vendor name" id="field-vendor-name" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-vendor-confirmation-number">Confirmation Number: </label>
+                                            <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-vendor-confirmation-number" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-vendor-departure-location">Departure Location: </label>
+                                            <input type="text" name="departs_from" placeholder="Enter the departure location" id="field-vendor-departure-location" class="input-size">  
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-vendor-arrival-location">Arrival Location: </label>
+                                            <input type="text" name="arrives_to" placeholder="Enter the arrival location" id="field-vendor-arrival-location" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-vendor-departure-date">Departure Date: </label>
+                                            <input type="date" name="start-date" placeholder="Enter the departure date" id="field-vendor-departure-date" class="input-size" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-vendor-departure-time">Departure Time: </label>
+                                            <input type="time" name="start-time" placeholder="Enter the departure time" value="00:00" id="field-vendor-departure-time" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">        
+                                           <div class="form-group">
+                                            <label for="field-vendor-arrival-date">Arrival Date: </label>
+                                            <input type="date" name="end-date" placeholder="Enter the arrival date" id="field-vendor-arrival-date" class="input-size" required>   
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-vendor-arrival-time">Arrival Time: </label>
+                                            <input type="time" name="end-time" placeholder="Enter the arrival time" value="00:00" id="field-vendor-arrival-time" class="input-size">   
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-travelers_name">Name of Traveler: </label>
+                                            <input type="text" name="travelers-name" placeholder="Enter the travelers name" id="field-travelers-name" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-public-trans-duration">Duration: </label>
+                                            <input type="text" name="public-trans-duration" placeholder="Enter the duration" id="field-public-trans-duration" class="input-size">  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-public-trans-num">Train/Bus #: </label>
+                                            <input type="text" name="public-trans-num" placeholder="Enter the train/bus #" id="field-public-trans-num" class="input-size">  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                     <input type="hidden" value="public-transportation" name="ftype">
+                                </div>
                             </div>
                         </form>
                     </div>
                     <div class="form-event" id="event" hidden>
                         <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
-                            <div class="form-group">
-                                <label for="field-event-name">Event Name: </label>
-                                <input type="text" name="event_name" placeholder="Enter the event name" id="field-event-name">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-event-confirmation-number">Confirmation Number: </label>
-                                <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-event-confirmation-number">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-event-start-date">Start Date: </label>
-                                <input type="date" name="start-date" placeholder="Enter the start date" id="field-start-date" required>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-event-start-time">Start Time: </label>
-                                <input type="time" name="start-time" placeholder="Enter the start time" value="00:00" id="field-event-start-time">   
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-event-address">Address: </label>
-                                <input type="text" name="address" placeholder="Enter the address" id="field-event-address">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <input type="submit" value="Add Trip Details">
-                                <input type="hidden" value="event" name="ftype">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-event-name">Event Name: </label>
+                                            <input type="text" name="event_name" placeholder="Enter the event name" id="field-event-name" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-event-confirmation-number">Confirmation Number: </label>
+                                            <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-event-confirmation-number" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-event-start-date">Start Date: </label>
+                                            <input type="date" name="start-date" placeholder="Enter the start date" id="field-start-date" class="input-size" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-event-start-time">Start Time: </label>
+                                            <input type="time" name="start-time" placeholder="Enter the start time" value="00:00" id="field-event-start-time" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-event-address">Address: </label>
+                                            <input type="text" name="address" placeholder="Enter the address" id="field-event-address" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="hidden" value="event" name="ftype">
+                                </div>
                             </div>
                         </form>
                     </div>
                     <div class="form-event" id="meeting" hidden>
                         <form action="/my_trips/{{ trip_id }}" method="POST" role="form">
-                            <div class="form-group">
-                                <label for="field-meeting-subject">Subject of Meeting: </label>
-                                <input type="text" name="meeting_subject" placeholder="Enter the subject of meeting" id="field-meeting-subject">
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-meeting-start-date">Start Date: </label>
-                                <input type="date" name="start-date" placeholder="Enter the start date" id="field-meeting-start-date">   
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="field-meeting-start-time">Start Time: </label>
-                                <input type="time" name="start-time" placeholder="Enter the start time" value="00:00" id="field-meeting-start-time">   
-                            </div>
-                            <br>
-                              <div class="form-group">
-                                <label for="field-meeting-address">Address: </label>
-                                <input type="text" name="address" placeholder="Enter the address" id="field-meeting-address">
-                            </div>
-                            <br>
-                            <div class="modal-footer">
-                                <input type="submit" value="Add Trip Details" class="btn btn-primary">
-                                <input type="hidden" value="meeting" name="ftype">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-meeting-subject">Subject of Meeting: </label>
+                                            <input type="text" name="meeting_subject" placeholder="Enter the subject of meeting" id="field-meeting-subject" class="input-size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                          <div class="form-group">
+                                            <label for="field-meeting-address">Address: </label>
+                                            <input type="text" name="address" placeholder="Enter the address" id="field-meeting-address" class="input-size">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-meeting-start-date">Start Date: </label>
+                                            <input type="date" name="start-date" placeholder="Enter the start date" id="field-meeting-start-date" class="input-size">   
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="field-meeting-start-time">Start Time: </label>
+                                            <input type="time" name="start-time" placeholder="Enter the start time" value="00:00" id="field-meeting-start-time" class="input-size">   
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="hidden" value="meeting" name="ftype">
+                                </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                    </form>
             </div>
         </div>
     </div>
@@ -585,7 +854,7 @@
             console.log(data)
             $.each(data.photos.photo, function(i, item) {
                 var photoURL = "http://farm" + item.farm + ".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_c.jpg";
-                $("#flickr-image").html("<img src="+ photoURL +"/>");
+                $("#flickr-image").css("background-image", "url(" + photoURL + ")");
             });
         });
 

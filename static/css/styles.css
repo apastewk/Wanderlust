@@ -1,3 +1,158 @@
+.navbar-text {
+    color: white;
+    font-size: 15px;
+}
+
+.modal-body {
+    font-size: 0;
+}
+
+.navbar-inverse {
+    background-color: transparent !important;
+    border: none;
+}
+
+#details {
+    height: 715px;
+    background-color: black !important;
+}
+
+#banner {
+    background-image: url("/static/css/sydney1.jpg");
+    background-size: cover;
+    height: 350px;
+    width: 1500px;
+    background-repeat: no-repeat;
+}
+
+.detailed-steps {
+    color: white;
+    text-align: center;
+    font-size: 50px;
+}
+
+.detailed-words {
+    font-size: 35px !important;
+}
+
+#signup-modal {
+    text-align: center;
+}
+
+#login-modal {
+    text-align: center;
+}
+
+.modal-title {
+    font-size: 30px;
+}
+
+#field-firstname {
+    height: 40px;
+    width: 400px;
+    font-size: 15px !important;
+}
+
+#field-lastname {
+    height: 40px;
+    width: 400px;
+    font-size: 15px !important;
+}
+
+#field-signup-email {
+    height: 40px;
+    width: 400px;
+    font-size: 15px !important;
+}
+
+#field-signup-password {
+    height: 40px;
+    width: 400px;
+    font-size: 15px !important;
+}
+
+#field-login-email {
+    height: 40px;
+    width: 400px;
+    font-size: 15px !important;
+}
+
+#field-login-password {
+    height: 40px;
+    width: 400px;
+    font-size: 15px !important;
+}
+
+#field-destination {
+    height: 40px;
+    width: 250px;
+    font-size: 15px !important;
+}
+
+#field-tripname {
+    height: 40px;
+    width: 250px;
+    font-size: 15px !important;
+}
+
+#field-startdate {
+    height: 40px;
+    width: 250px;
+    font-size: 15px !important;
+}
+
+#field-enddate {
+    height: 40px;
+    width: 250px;
+    font-size: 15px !important;
+}
+
+#field-optionalnotes {
+    height: 70px;
+    width: 532px;
+    font-size: 15px !important;
+}
+
+#new-trip {
+    text-align: center;
+}
+
+#submit-button {
+    height: 40px;
+    width: 400px;
+    text-align: center;
+    border-radius: 0;
+    font-size: 20px;
+}
+
+#submit-button-trip {
+    height: 40px;
+    width: 532px;
+    text-align: center;
+    border-radius: 0;
+    font-size: 20px;
+}
+
+#submit-button-trip1 {
+    height: 40px;
+    width: 547px;
+    text-align: center;
+    border-radius: 0;
+    font-size: 20px;
+}
+
+#start {
+    font-size: 15px;
+    text-align: inherit;
+    color: grey;
+}
+
+#end {
+    font-size: 15px;
+    text-align: inherit;
+    color: grey;
+}
+
 #my-trips {
     text-align: center;
     font-size: 60px;
@@ -16,6 +171,27 @@
 
 #trips-list {
     text-align: center;
+    color: white;
+}
+
+#trips-position {
+    top: 30%;
+    left: 0;
+    line-height: 200px;
+    margin: auto;
+    margin-top: -100px;
+    position: absolute;
+    width: 100% 
+}
+   
+.input-size {
+    height: 40px;
+    width: 250px;
+    font-size: 15px !important;
+}
+
+#event-dropdown {
+    text-align: center;
 }
 
 #sunset {
@@ -26,28 +202,22 @@
     background-color: black;
 }
 
-/*#flickr-image {
-    height:25px;
-    width: 500px;
-
-}*/
-
-#flickr-background {
-    background-color: black;
+#newtrip-modal {
+    text-align: left;
 }
 
-#lake {
-    background-image: url("/static/css/sydney.jpg");
-    height: 400px;
-    width: 1446px;
+#flickr-image {
+    height: 350px;
+    width: 1475px;
     background-repeat: no-repeat;
-    background-size: 1500px 400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #title {
     font-family: "Courier New", monospace;
     text-align: center;
-    font-size: 80px;
+    font-size: 90px;
     color: white;
 }
 
@@ -61,16 +231,34 @@
     width: 100%
 }
 
+#create-new-trips {
+    top: 70%;
+    left: 0;
+    margin: auto;
+    margin-top: -100px;
+    position: absolute;
+    width: 100%
+}
+
 #nav-title {
     font-family: "Courier New", monospace;
     font-size: 40px;
 }
 
+#nav-buttons {
+    top: 70%;
+    left: 0;
+    margin: auto;
+    margin-top: -100px;
+    position: absolute;
+    width: 100%
+}
+
 #quote {
     text-align: center;
-    font-size: 30px;
+    font-size: 33px;
     color: white;
-    top: 45%;
+    top: 48%;
     left: 0;
     line-height: 200px;
     margin: auto;
@@ -79,9 +267,33 @@
     width: 100%
 }
 
+.itinerary-center {
+    text-align: left
+}
+
+.itinerary-right {
+    text-align: right
+}
+
 #table-position {
-    top: 45%;
+    top: 60%;
     left: 0;
     position: absolute;
     width: 100%;
+}
+
+.details-button {
+    top: 70%;
+    left: 0;
+    /*position: absolute;*/
+    width: 50%; 
+}
+
+#add-event {
+    font-size: 20px;
+}
+
+.jumbotron {
+    background-position: center;
+    background-color: black;
 }
