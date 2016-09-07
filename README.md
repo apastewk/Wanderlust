@@ -1,4 +1,4 @@
-<p>Wanderlust</p>
+<h1>Wanderlust</h1>
 
 <p><strong>Description</strong></p>
 
