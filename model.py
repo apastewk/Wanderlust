@@ -211,27 +211,27 @@ class Meeting(db.Model):
             self.meeting_id, self.trip_id, self.meeting_subject, self.starts_at)
 
 
-def example_data():
-    """Create some sample data."""
+# def example_data():
+#     """Create some sample data."""
 
-    meeting = Meeting(trip_id=1,
-                      meeting_subject="Uber",
-                      starts_at=datetime.strptime("2016-08-26 18:00:00", "%Y-%m-%d %H:%M:%S"),
-                      address="123 Cooper St, Oakland, CA")
+#     meeting = Meeting(trip_id=1,
+#                       meeting_subject="Uber",
+#                       starts_at=datetime.strptime("2016-08-26 18:00:00", "%Y-%m-%d %H:%M:%S"),
+#                       address="123 Cooper St, Oakland, CA")
 
-    trip = Trip(user_id=1,
-                start_date=datetime.strptime("2016-08-10 00:00:00", "%Y-%m-%d %H:%M:%S"),
-                end_date=datetime.strptime("2016-09-20 00:00:00", "%Y-%m-%d %H:%M:%S"),
-                trip_name="Rome",
-                destination="Rome")
+#     trip = Trip(user_id=1,
+#                 start_date=datetime.strptime("2016-08-10 00:00:00", "%Y-%m-%d %H:%M:%S"),
+#                 end_date=datetime.strptime("2016-09-20 00:00:00", "%Y-%m-%d %H:%M:%S"),
+#                 trip_name="Rome",
+#                 destination="Rome")
 
-    user = User(firstname="Lauren",
-                lastname="Budd",
-                email="laurenb@gmail.com",
-                password="f8cdb04495ded4761525")
+#     user = User(firstname="Lauren",
+#                 lastname="Budd",
+#                 email="laurenb@gmail.com",
+#                 password="f8cdb04495ded4761525")
 
-    db.session.add_all([meeting, trip, user])
-    db.session.commit()
+#     db.session.add_all([meeting, trip, user])
+#     db.session.commit()
 
 ################################################################################
 

@@ -1,6 +1,28 @@
-.navbar-text {
+body {
+    padding: 0;
+    margin: 0;
+    margin-top: -10px;
+    font-family: "Lato", sans-serif; 
+    background-image: url("/static/css/brickwall/brickwall.png");
+}
+
+.navbar-text-fixed {
     color: white;
     font-size: 15px;
+}
+
+.navbar-text1 {
+    color: white;
+    font-size: 15px;
+    margin-top: -30px;
+    margin-right: 10px;
+}
+
+.navbar-text2 {
+    color: white;
+    font-size: 15px;
+    margin-top: -30px;
+    margin-right: 35px;
 }
 
 .modal-body {
@@ -123,6 +145,7 @@
     text-align: center;
     border-radius: 0;
     font-size: 20px;
+    background-color: rgb(218, 115, 88);
 }
 
 #submit-button-trip {
@@ -131,6 +154,7 @@
     text-align: center;
     border-radius: 0;
     font-size: 20px;
+    background-color: rgb(218, 115, 88)
 }
 
 #submit-button-trip1 {
@@ -139,6 +163,7 @@
     text-align: center;
     border-radius: 0;
     font-size: 20px;
+    background-color: rgb(218, 115, 88)
 }
 
 #start {
@@ -185,7 +210,7 @@
 }
    
 .input-size {
-    height: 40px;
+    height: 30px;
     width: 250px;
     font-size: 15px !important;
 }
@@ -215,14 +240,15 @@
 }
 
 #title {
-    font-family: "Courier New", monospace;
+    font-family: "Raleway", sans-serif;
     text-align: center;
-    font-size: 90px;
+    font-size: 120px;
     color: white;
+    font-weight: 100;
 }
 
 #title-position {
-    top: 40%;
+    top: 35%;
     left: 0;
     line-height: 200px;
     margin: auto;
@@ -240,9 +266,18 @@
     width: 100%
 }
 
-#nav-title {
-    font-family: "Courier New", monospace;
+#nav-title-fixed {
+    font-family: "Raleway", sans-serif;
     font-size: 40px;
+    padding-top: 25px;
+    color: rgb(218, 115, 88);
+}
+
+#nav-title {
+    font-family: "Raleway", sans-serif;
+    font-size: 40px;
+    margin-top: -30px;
+    color: rgb(218, 115, 88);
 }
 
 #nav-buttons {
@@ -256,9 +291,9 @@
 
 #quote {
     text-align: center;
-    font-size: 33px;
+    font-size: 30px;
     color: white;
-    top: 48%;
+    top: 45%;
     left: 0;
     line-height: 200px;
     margin: auto;
@@ -276,7 +311,7 @@
 }
 
 #table-position {
-    top: 60%;
+    top: 52%;
     left: 0;
     position: absolute;
     width: 100%;
@@ -285,7 +320,7 @@
 .details-button {
     top: 70%;
     left: 0;
-    /*position: absolute;*/
+    position: absolute;
     width: 50%; 
 }
 
@@ -296,4 +331,12 @@
 .jumbotron {
     background-position: center;
     background-color: black;
+}
+
+.dropdown-menu {
+    opacity: 0.5;
+}
+
+#panel {
+    height: 75px;
 }

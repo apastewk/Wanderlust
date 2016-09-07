@@ -1,9 +1,7 @@
 from operator import attrgetter
-from datetime import datetime
+from datetime import datetime, timedelta
 import hashlib
 from model import Trip
-# from xml_parser import worldmate_xml_parser, user_parser
-# from service import identify_email_type, identify_users_trip, create_item
 
 ################################################################################
 
@@ -15,7 +13,6 @@ def hash_password(password):
         'f8cdb04495ded4761525'
     """
 
-     # salt = uuid.uuid4().hex
     return hashlib.sha224(password).hexdigest()[:20]
 
 
@@ -41,10 +38,10 @@ def get_trip_entities(trip):
     return sorted_results
 
 
-# def daterange(start_date, end_date):
-#     """Determines"""
-#     for n in range(int((end_date - start_date).days)):
-#         yield start_date + timedelta(n)
+def daterange(start_date, end_date):
+    """Determines"""
+    for n in range(int((end_date - start_date).days)):
+        yield start_date + timedelta(n)
 
 
 def create_trip_entities_dict(trip_entities):

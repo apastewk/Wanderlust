@@ -98,9 +98,9 @@ class DatabaseTests(unittest.TestCase):
         self.assertIn("Add an Event", result.data)
 
     def test_identify_user_trip(self):
-        """Tests to find that there is a trip that matches a users email.""" 
+        """Tests to find that there is a trip that matches a users email."""
 
-        identify_users_trip(datetime.strptime("2016-08-10 00:00:00", "%Y-%m-%d %H:%M:%S"), "laurenb@gmail.com") 
+        identify_users_trip(datetime.strptime("2016-08-10 00:00:00", "%Y-%m-%d %H:%M:%S"), "laurenb@gmail.com")
 
         assert 1
 

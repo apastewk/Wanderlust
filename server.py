@@ -3,7 +3,7 @@
 from flask import Flask, render_template, redirect, request, flash, session
 from model import connect_to_db, User, Trip
 from utility import hash_password, get_trip_entities, modifies_user_trips
-from utility import create_trip_entities_dict, count_user_trips
+from utility import create_trip_entities_dict, count_user_trips, daterange
 from service import create_item, check_login, signup, add_new_trip_to_db
 from service import identify_users_trip, identify_email_type
 from xml_parser import worldmate_xml_parser, user_parser
@@ -119,26 +119,26 @@ def trip_details(trip_id):
     trip_name = trip.trip_name
     destination = trip.destination
 
-    # start_date = trip.start_date
-    # end_date = trip.end_date
+    start_date = trip.start_date
+    end_date = trip.end_date
 
-    # range_of_dates = []
+    range_of_dates = []
 
-    # for single_date in daterange(start_date, end_date):
-    #     conv_single_date = single_date.strftime("%a, %b %d, %Y")
-    #     range_of_dates.append(conv_single_date)
-
-    # flickr.flickr_search(destination)
+    for single_date in daterange(start_date, end_date):
+        conv_single_date = single_date.strftime("%a, %b %d, %Y")
+        range_of_dates.append(conv_single_date)
 
     trip_entities = get_trip_entities(trip)
 
     trip_entities = create_trip_entities_dict(trip_entities)
+    print trip_entities
 
     return render_template("trip_details.html",
                             trip_id=trip_id,
                             trip_name=trip_name,
                             trip_entities=trip_entities,
-                            destination=destination)
+                            destination=destination,
+                            range_of_dates=range_of_dates)
 
 
 @app.route("/my_trips/<trip_id>", methods=["POST"])

@@ -4,7 +4,7 @@
 {% block body %}
 
     <div class="jumbotron" id="flickr-image">
-        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="col-offset-xs-3 col-xs-2">
                     <div class="navbar-header">
@@ -12,8 +12,8 @@
                     </div>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/my_trips" class="navbar-text"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
-                    <li><a href="/logout" class="navbar-text"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                    <li><a href="/my_trips" class="navbar-text1"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+                    <li><a href="/logout" class="navbar-text2"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                 </ul>
             </div>
         </nav>
@@ -30,8 +30,12 @@
         <div class="row">
             <div class="col-xs-offset-2 col-xs-8">
                 <div class="panel panel-default">
+                    <div class="panel-heading" id="panel">
+                        <h3><a style="float:right" id="add-event" data-toggle="modal" data-target="#event-modal">+ Add Event</a></h3>
+                    </div>
+                    {% for date in range_of_dates %}
                     {% for entity in trip_entities %}
-                        {% if entity["starts_at"] %}
+                        {% if entity["starts_at"] == date %}
                             <div class="panel-heading">
                                 <h3>{{ entity["starts_at"] }}<a style="float:right" id="add-event" data-toggle="modal" data-target="#event-modal">+ Add Event</a></h3>
                             </div>
@@ -53,19 +57,21 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="details-button">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <div class="col-xs-6">
-                                                    <h4>Flight Details</h4>
-                                                    <div>Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
-                                                    <div>Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
-                                                    <div>Duration: {{ entity["duration"] }}</div>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <h4>Booking Details</h4>
-                                                    <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                                                    <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Flight Details</h4>
+                                                        <div>Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
+                                                        <div>Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
+                                                        <div>Duration: {{ entity["duration"] }}</div>
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <h4>Booking Details</h4>
+                                                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                                                        <div class="core_details">Rewards #: {{ entity["rewards_num"] }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -90,18 +96,20 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="details-button">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <div class="col-xs-6">
-                                                    <h4>Hotel Details</h4>
-                                                    <div>Check-in: {{ entity["start_time"] }}</div>
-                                                    <div>Check-out: {{ entity["end_time"] }}</div>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <h4>Booking Details</h4>
-                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
-                                                    <div>Type of room: {{ entity["room_type"] }}</div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Hotel Details</h4>
+                                                        <div>Check-in: {{ entity["start_time"] }}</div>
+                                                        <div>Check-out: {{ entity["end_time"] }}</div>
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <h4>Booking Details</h4>
+                                                        <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                        <div>Type of room: {{ entity["room_type"] }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -126,20 +134,22 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="details-button">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <div class="col-xs-6">
-                                                    <h4>Rental Agency Details</h4>
-                                                    <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
-                                                    <div class="core_details">Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <h4>Booking Details</h4>
-                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
-                                                    <div>Car Type: {{ entity["car_type"] }}</div>
-                                                    <div>Driver: {{ entity["drivers_name"] }}</div>
-                                                    <div>Rewards #: {{ entity["rewards_num"] }}</div> 
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Rental Agency Details</h4>
+                                                        <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
+                                                        <div class="core_details">Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div>
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <h4>Booking Details</h4>
+                                                        <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                        <div>Car Type: {{ entity["car_type"] }}</div>
+                                                        <div>Driver: {{ entity["drivers_name"] }}</div>
+                                                        <div>Rewards #: {{ entity["rewards_num"] }}</div> 
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -164,19 +174,21 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="details-button">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <div class="col-xs-6">
-                                                    <h4>Vendor Details</h4>
-                                                    <div>Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
-                                                    <div>Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <h4>Booking Details</h4>
-                                                    <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                                                    <div class="core_details">Travelers Name: {{ entity["travelers_name"] }}</div> 
-                                                    <div class="core_details">Duration: {{ entity["duration"] }}</div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Vendor Details</h4>
+                                                        <div>Depart: {{ entity["start_time"] }} {{ entity["departs_from"] }}</div>
+                                                        <div>Arrive: {{ entity["end_time"] }} {{ entity["arrives_to"] }}</div>
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <h4>Booking Details</h4>
+                                                        <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                        <div>Travelers Name: {{ entity["travelers_name"] }}</div> 
+                                                        <div>Duration: {{ entity["duration"] }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -201,17 +213,19 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="details-button">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <div class="col-xs-6">
-                                                    <h4>Event Details</h4>
-                                                    <div>Start Time: {{ entity["start_time"] }}</div>
-                                                    <div>Address: {{ entity["address"] }}</div>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <h4>Booking Details</h4>
-                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Event Details</h4>
+                                                        <div>Start Time: {{ entity["start_time"] }}</div>
+                                                        <div>Address: {{ entity["address"] }}</div>
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <h4>Booking Details</h4>
+                                                        <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -232,19 +246,23 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="col-offset-xs-3 col-xs-6">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <h4>Meeting Details</h4>
-                                                <div>Start Time: {{ entity["start_time"] }}</div>
-                                                <div>Address: {{ entity["address"] }}</div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Meeting Details</h4>
+                                                        <div>Start Time: {{ entity["start_time"] }}</div>
+                                                        <div>Address: {{ entity["address"] }}</div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             {% endif %}
                         {% endif %}
-                        {% if entity["ends_at"] %}
+                        {% if entity["ends_at"] == date %}
                             <div class="panel-heading">
                                 <h3>{{ entity["ends_at"] }}</h3>
                             </div>
@@ -262,13 +280,15 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="details-button">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <div class="col-xs-6">
-                                                    <h4>Booking Details</h4>
-                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
-                                                    <div>Rewards #: {{ entity["rewards_num"] }}</div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Booking Details</h4>
+                                                        <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                        <div>Rewards #: {{ entity["rewards_num"] }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -293,18 +313,20 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="details-button">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <div class="col-xs-6">
-                                                    <h4>Hotel Details</h4>
-                                                    <div class="core_details">Check-in: {{ entity["start_time"] }}</div>
-                                                    <div class="core_details">Check-out: {{ entity["end_time"] }}</div>
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <h4>Booking Details</h4>
-                                                    <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
-                                                   <div class="core_details">Type of room: {{ entity["room_type"] }}</div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Hotel Details</h4>
+                                                        <div class="core_details">Check-in: {{ entity["start_time"] }}</div>
+                                                        <div class="core_details">Check-out: {{ entity["end_time"] }}</div>
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <h4>Booking Details</h4>
+                                                        <div class="core_details">Reference #: {{ entity["confirmation_num"] }}</div>
+                                                       <div class="core_details">Type of room: {{ entity["room_type"] }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -329,20 +351,22 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="details-button">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <div class="col-xs-6">
-                                                    <h4>Rental Agency Details</h4>
-                                                    <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
-                                                    <div>Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div class="core_details">
-                                                </div>
-                                                <div class="col-xs-6">
-                                                    <h4>Booking Details</h4>
-                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
-                                                    <div>Car Type: {{ entity["car_type"] }}</div>
-                                                    <div>Driver: {{ entity["drivers_name"] }}</div>
-                                                    <div>Rewards #: {{ entity["rewards_num"] }}</div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Rental Agency Details</h4>
+                                                        <div class="core_details">Pick-up: {{ entity["start_time"] }} {{ entity["pickup_from"] }}</div>
+                                                        <div>Drop-off: {{ entity["end_time"] }} {{ entity["dropoff_to"] }}</div class="core_details">
+                                                    </div>
+                                                    <div class="col-xs-4">
+                                                        <h4>Booking Details</h4>
+                                                        <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                        <div>Car Type: {{ entity["car_type"] }}</div>
+                                                        <div>Driver: {{ entity["drivers_name"] }}</div>
+                                                        <div>Rewards #: {{ entity["rewards_num"] }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -363,14 +387,16 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="details-button">
-                                            <button class="toggle">Show more details</button>
+                                        <div class="col-xs-offset-3 col-xs-8">
+                                            <button class="btn btn-default" class="toggle">Show more details</button>
                                             <div class="wrapper" style="display: none;">
-                                                <div class="col-xs-6">
-                                                    <h4>Booking Details</h4>
-                                                    <div>Reference #: {{ entity["confirmation_num"] }}</div>
-                                                    <div>Travelers Name: {{ entity["travelers_name"] }}</div> 
-                                                    <div>Duration: {{ entity["duration"] }}</div>
+                                                <div class="row">
+                                                    <div class="col-xs-4">
+                                                        <h4>Booking Details</h4>
+                                                        <div>Reference #: {{ entity["confirmation_num"] }}</div>
+                                                        <div>Travelers Name: {{ entity["travelers_name"] }}</div> 
+                                                        <div>Duration: {{ entity["duration"] }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div> 
@@ -378,6 +404,7 @@
                                 </div>
                             {% endif %}
                         {% endif %}
+                    {% endfor %}
                     {% endfor %}
                 </div>
             </div>
@@ -471,13 +498,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-flight-arrival-city">Arrival City: </label>
-                                            <input type="text" name="arrives_to" placeholder="Arrival City" id="field-flight-arrival-city" class="input-size">   
+                                            <input type="text" name="arrives_to" id="field-flight-arrival-city" class="input-size">   
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-arrival-airport-code">Arrival City Airport Code: </label>
-                                            <input type="text" name="airpt_code_arr" placeholder="Arrival Code" id="field-arrival-airport-code" class="input-size">  
+                                            <input type="text" name="airpt_code_arr" id="field-arrival-airport-code" class="input-size">  
                                         </div>
                                     </div>
                                 </div>
@@ -485,13 +512,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-flight-arrival-date">Arrival Date: </label>
-                                            <input type="date" name="end-date" placeholder="Arrival Date" id="field-flight-arrival-date" class="input-size" required>  
+                                            <input type="date" name="end-date" id="field-flight-arrival-date" class="input-size" required>  
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-flight-arrival-time">Arrival Time: </label>
-                                            <input type="time" name="end-time" placeholder="Arrival Time" value="00:00" id="field-flight-arrival-time" class="input-size">   
+                                            <input type="time" name="end-time" value="00:00" id="field-flight-arrival-time" class="input-size">   
                                         </div>
                                     </div>
                                 </div>
@@ -499,12 +526,12 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-flight-rewards-number">Rewards Number: </label>
-                                            <input type="text" name="rewards_num" placeholder="Rewards Number" id="field-flight-rewards-number" class="input-size">
+                                            <input type="text" name="rewards_num" id="field-flight-rewards-number" class="input-size">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="submit" value="Add Trip Details" class="btn" id="submit-button-trip1">
                                     <input type="hidden" value="flight" name="ftype">
                                 </div>
                             </div>
@@ -517,13 +544,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-hotel-name">Hotel Name: </label>
-                                            <input type="text" name="hotel_name" placeholder="Enter the hotel-name" id="field-hotel-name" class="input-size">
+                                            <input type="text" name="hotel_name" id="field-hotel-name" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-hotel-address">Hotel Address: </label>
-                                            <input type="text" name="address" placeholder="Enter the address" id="field-hotel-address" class="input-size">  
+                                            <input type="text" name="address" id="field-hotel-address" class="input-size">  
                                         </div>
                                     </div>
                                 </div>
@@ -531,13 +558,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-hotel-confirmation-number">Confirmation Number: </label>
-                                            <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-hotel-confirmation-number" class="input-size">
+                                            <input type="text" name="confirmation_num" id="field-hotel-confirmation-number" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                          <div class="form-group">
                                             <label for="field-room-type">Type of Room: </label>
-                                            <input type="text" name="room_type" placeholder="Enter the type of room" id="field-room-type" class="input-size">  
+                                            <input type="text" name="room_type" id="field-room-type" class="input-size">  
                                         </div>
                                     </div>
                                 </div>
@@ -545,13 +572,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-hotel-arrival-date">Arrival Date: </label>
-                                            <input type="date" name="start-date" placeholder="Enter the arrival date" id="field-arrival-date" class="input-size" required>
+                                            <input type="date" name="start-date" id="field-arrival-date" class="input-size" required>
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-hotel-arrival-time">Arrival Time: </label>
-                                            <input type="time" name="start-time" placeholder="Enter the arrival time" value="00:00" id="field-arrival-time" class="input-size">
+                                            <input type="time" name="start-time" value="00:00" id="field-arrival-time" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -559,18 +586,18 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-hotel-departure-date">Departure Date: </label>
-                                            <input type="date" name="end-date" placeholder="Enter the departure date" id="field-hotel-departure-date" class="input-size" required>  
+                                            <input type="date" name="end-date" id="field-hotel-departure-date" class="input-size" required>  
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-hotel-departure-time">Departure Time: </label>
-                                            <input type="time" name="end-time" placeholder="Enter the departure time" value="00:00" id="field-departure-time" class="input-size">
+                                            <input type="time" name="end-time" value="00:00" id="field-departure-time" class="input-size">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="submit" value="Add Trip Details" class="btn" id="submit-button-trip1">
                                     <input type="hidden" value="hotel" name="ftype">
                                 </div>
                             </form>
@@ -583,13 +610,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-agency-name">Car Agency Name: </label>
-                                            <input type="text" name="agency_name" placeholder="Enter the agency-name" id="field-agency-name" class="input-size">
+                                            <input type="text" name="agency_name" id="field-agency-name" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-car-confirmation-number">Confirmation Number: </label>
-                                            <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-car-confirmation-number" class="input-size">
+                                            <input type="text" name="confirmation_num" id="field-car-confirmation-number" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -597,13 +624,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-car-type">Car Type: </label>
-                                            <input type="text" name="car_type" placeholder="Enter the confirmation #" id="field-car-type" class="input-size">
+                                            <input type="text" name="car_type" id="field-car-type" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-pickup-location">Pick-Up Location: </label>
-                                            <input type="text" name="pickup_from" placeholder="Enter the pickup location" id="field-pickup-location" class="input-size">
+                                            <input type="text" name="pickup_from" id="field-pickup-location" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -611,13 +638,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-pickup-time">Pick-Up Time: </label>
-                                            <input type="time" name="start-time" placeholder="Enter the pickup time" value="00:00" id="field-pickup-time" class="input-size">
+                                            <input type="time" name="start-time" id="field-pickup-time" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-pickup-date">Pick-Up Date: </label>
-                                            <input type="date" name="start-date" placeholder="Enter the pickup date" id="field-pickup-date" class="input-size" required>
+                                            <input type="date" name="start-date" id="field-pickup-date" class="input-size" required>
                                         </div>
                                     </div>
                                 </div>
@@ -625,13 +652,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-dropoff-time">Drop-Off Time: </label>
-                                            <input type="time" name="end-time" placeholder="Enter the dropoff time" value="00:00" id="field-dropoff-time" class="input-size">
+                                            <input type="time" name="end-time" value="00:00" id="field-dropoff-time" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-dropoff-date">Drop-Off Date: </label>
-                                            <input type="date" name="end-date" placeholder="Enter the dropoff date" id="field-dropoff-date" class="input-size" required>
+                                            <input type="date" name="end-date" id="field-dropoff-date" class="input-size" required>
                                         </div>
                                     </div>
                                 </div>
@@ -639,13 +666,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-dropoff-location">Drop-Off Location: </label>
-                                            <input type="text" name="dropoff_at" placeholder="Enter the dropoff location" id="field-dropoff-location" class="input-size">
+                                            <input type="text" name="dropoff_at" id="field-dropoff-location" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-drivers-name">Driver Name: </label>
-                                            <input type="text" name="drivers-name" placeholder="Enter the drivers name" id="field-drivers-name" class="input-size">
+                                            <input type="text" name="drivers-name" id="field-drivers-name" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -653,12 +680,12 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-car-rental-rewards-number">Rewards Number: </label>
-                                            <input type="text" name="rewards-num" placeholder="Enter your rewards #" id="field-car-rental-rewards-number" class="input-size">
+                                            <input type="text" name="rewards-num" id="field-car-rental-rewards-number" class="input-size">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="submit" value="Add Trip Details" class="btn" id="submit-button-trip1">
                                     <input type="hidden" value="car-rental" name="ftype">
                                 </div>
                             </div>
@@ -671,13 +698,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-vendor-name">Vendor Name: </label>
-                                            <input type="text" name="vendor_name" placeholder="Enter the vendor name" id="field-vendor-name" class="input-size">
+                                            <input type="text" name="vendor_name" id="field-vendor-name" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-vendor-confirmation-number">Confirmation Number: </label>
-                                            <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-vendor-confirmation-number" class="input-size">
+                                            <input type="text" name="confirmation_num" id="field-vendor-confirmation-number" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -685,13 +712,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-vendor-departure-location">Departure Location: </label>
-                                            <input type="text" name="departs_from" placeholder="Enter the departure location" id="field-vendor-departure-location" class="input-size">  
+                                            <input type="text" name="departs_from" id="field-vendor-departure-location" class="input-size">  
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-vendor-arrival-location">Arrival Location: </label>
-                                            <input type="text" name="arrives_to" placeholder="Enter the arrival location" id="field-vendor-arrival-location" class="input-size">
+                                            <input type="text" name="arrives_to" id="field-vendor-arrival-location" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -699,13 +726,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-vendor-departure-date">Departure Date: </label>
-                                            <input type="date" name="start-date" placeholder="Enter the departure date" id="field-vendor-departure-date" class="input-size" required>
+                                            <input type="date" name="start-date" id="field-vendor-departure-date" class="input-size" required>
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-vendor-departure-time">Departure Time: </label>
-                                            <input type="time" name="start-time" placeholder="Enter the departure time" value="00:00" id="field-vendor-departure-time" class="input-size">
+                                            <input type="time" name="start-time" value="00:00" id="field-vendor-departure-time" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -713,13 +740,13 @@
                                     <div class="col-xs-6">        
                                            <div class="form-group">
                                             <label for="field-vendor-arrival-date">Arrival Date: </label>
-                                            <input type="date" name="end-date" placeholder="Enter the arrival date" id="field-vendor-arrival-date" class="input-size" required>   
+                                            <input type="date" name="end-date" id="field-vendor-arrival-date" class="input-size" required>   
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-vendor-arrival-time">Arrival Time: </label>
-                                            <input type="time" name="end-time" placeholder="Enter the arrival time" value="00:00" id="field-vendor-arrival-time" class="input-size">   
+                                            <input type="time" name="end-time" value="00:00" id="field-vendor-arrival-time" class="input-size">   
                                         </div>
                                     </div>
                                 </div>
@@ -727,13 +754,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-travelers_name">Name of Traveler: </label>
-                                            <input type="text" name="travelers-name" placeholder="Enter the travelers name" id="field-travelers-name" class="input-size">
+                                            <input type="text" name="travelers-name" id="field-travelers-name" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-public-trans-duration">Duration: </label>
-                                            <input type="text" name="public-trans-duration" placeholder="Enter the duration" id="field-public-trans-duration" class="input-size">  
+                                            <input type="text" name="public-trans-duration" id="field-public-trans-duration" class="input-size">  
                                         </div>
                                     </div>
                                 </div>
@@ -741,12 +768,12 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-public-trans-num">Train/Bus #: </label>
-                                            <input type="text" name="public-trans-num" placeholder="Enter the train/bus #" id="field-public-trans-num" class="input-size">  
+                                            <input type="text" name="public-trans-num" id="field-public-trans-num" class="input-size">  
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="submit" value="Add Trip Details" class="btn" id="submit-button-trip1">
                                      <input type="hidden" value="public-transportation" name="ftype">
                                 </div>
                             </div>
@@ -759,13 +786,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-event-name">Event Name: </label>
-                                            <input type="text" name="event_name" placeholder="Enter the event name" id="field-event-name" class="input-size">
+                                            <input type="text" name="event_name" id="field-event-name" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-event-confirmation-number">Confirmation Number: </label>
-                                            <input type="text" name="confirmation_num" placeholder="Enter the confirmation #" id="field-event-confirmation-number" class="input-size">
+                                            <input type="text" name="confirmation_num" id="field-event-confirmation-number" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -773,13 +800,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-event-start-date">Start Date: </label>
-                                            <input type="date" name="start-date" placeholder="Enter the start date" id="field-start-date" class="input-size" required>
+                                            <input type="date" name="start-date" id="field-start-date" class="input-size" required>
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-event-start-time">Start Time: </label>
-                                            <input type="time" name="start-time" placeholder="Enter the start time" value="00:00" id="field-event-start-time" class="input-size">
+                                            <input type="time" name="start-time" value="00:00" id="field-event-start-time" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -787,12 +814,12 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-event-address">Address: </label>
-                                            <input type="text" name="address" placeholder="Enter the address" id="field-event-address" class="input-size">
+                                            <input type="text" name="address" id="field-event-address" class="input-size">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="submit" value="Add Trip Details" class="btn" id="submit-button-trip1">
                                     <input type="hidden" value="event" name="ftype">
                                 </div>
                             </div>
@@ -805,13 +832,13 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-meeting-subject">Subject of Meeting: </label>
-                                            <input type="text" name="meeting_subject" placeholder="Enter the subject of meeting" id="field-meeting-subject" class="input-size">
+                                            <input type="text" name="meeting_subject" id="field-meeting-subject" class="input-size">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                           <div class="form-group">
                                             <label for="field-meeting-address">Address: </label>
-                                            <input type="text" name="address" placeholder="Enter the address" id="field-meeting-address" class="input-size">
+                                            <input type="text" name="address" id="field-meeting-address" class="input-size">
                                         </div>
                                     </div>
                                 </div>
@@ -819,18 +846,18 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-meeting-start-date">Start Date: </label>
-                                            <input type="date" name="start-date" placeholder="Enter the start date" id="field-meeting-start-date" class="input-size">   
+                                            <input type="date" name="start-date" id="field-meeting-start-date" class="input-size">   
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label for="field-meeting-start-time">Start Time: </label>
-                                            <input type="time" name="start-time" placeholder="Enter the start time" value="00:00" id="field-meeting-start-time" class="input-size">   
+                                            <input type="time" name="start-time" value="00:00" id="field-meeting-start-time" class="input-size">   
                                         </div>
                                     </div> 
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Add Trip Details" class="btn btn-primary" id="submit-button-trip1">
+                                    <input type="submit" value="Add Trip Details" class="btn" id="submit-button-trip1">
                                     <input type="hidden" value="meeting" name="ftype">
                                 </div>
                             </div>
@@ -842,12 +869,6 @@
     </div>
 
     <script>
-        // import os;
-
-        // FLICKR_KEY = os.environ["FLICKR_KEY"]
-        // FLICKR_SECRET = os.environ["FLICKR_SECRET"]
-        // Api key, putting photo
-        // in the right place 
         var destination = $("#flickr").val();
 
         $.get("https://api.flickr.com/services/rest/?method=flickr.photos.search&text=" + destination + "&tags=" + destination + "&tags=+skyline&per_page=3&format=json&nojsoncallback=1&api_key=42e04b071b3c85f33c0892cb9bba7560", function(data) {
@@ -864,7 +885,7 @@
             $(idName).show();
         });
   
-        $(".toggle").click(function() {
+        $(".btn-default").click(function() {
             $(this).next(".wrapper").slideToggle("slow");
 
             var text = $(this).text();

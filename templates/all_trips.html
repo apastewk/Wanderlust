@@ -9,16 +9,20 @@
             <div class="container-fluid">
                 <div class= "col-offset-xs-3 col-xs-2">
                     <div class="navbar-header">
-                        <a class="navbar-brand" id="nav-title" href="/">Wanderlust</a>
+                        <a class="navbar-brand" id="nav-title-fixed" href="/">Wanderlust</a>
                     </div>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <div class="dropdown-menu">
-                        <li class="dropdown-header">How To?</li>
-                            <div class="dropdown-item">blah</div>
-                    </div>
-                    <li><a href="/my_trips" class="navbar-text"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
-                    <li><a href="/logout" class="navbar-text"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                    <li><a href="/my_trips" class="navbar-text-fixed"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+                    <li><a href="/logout" class="navbar-text-fixed"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                    <li class="navbar-text-fixed" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-book"></span> About<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a>1. Create a Trip</a></li>
+                            <li><a>2. Forward your Confirmation Emails to WorldMate's indbox</a></li> 
+                            <li><a>(ce98adfb-3cf8-4ba1-c2bd-5eedb8197bc1-5547@api.worldmate.com)</a></li>
+                            <li><a>3. Access your Itinerary</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -30,14 +34,13 @@
             </div>
         </div>
     </div>
-    <div class="container" id="create-new-trips">
+    <div class="container" id="table-position">
         <div class="row">
-            <div class="col-xs-offset-8 col-xs-2">
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#newtrip-modal">Create new trip</button>
+            <div class="col-xs-offset-1 col-xs-2"> 
+                <button type="button" class="btn btn-lg" data-toggle="modal" data-target="#newtrip-modal" style="background-color: rgb(218, 115, 88)">Create new trip</button>
             </div>
         </div>
-    </div>
-    <div class="container" id="table-position">
+        <br>
         <div class="row">
             <div class="col-xs-offset-1 col-xs-2">
                 <div class="btn-group" role="group" aria-label="past/future-trips">
@@ -151,7 +154,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="submit" value="Add Trip" class="btn btn-primary" id="submit-button-trip">
+                            <input type="submit" value="Add Trip" class="btn" id="submit-button-trip">
                         </div>        
                     </form>
                 </div>
