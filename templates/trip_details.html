@@ -31,13 +31,13 @@
             <div class="col-xs-offset-2 col-xs-8">
                 <div class="panel panel-default">
                     <div class="panel-heading" id="panel">
-                        <h3><a style="float:right" id="add-event" data-toggle="modal" data-target="#event-modal">+ Add Event</a></h3>
+                        <h2>ITINERARY<a style="float:right" id="add-event" data-toggle="modal" data-target="#event-modal">+ Add Event</a></h2>
                     </div>
                     {% for date in range_of_dates %}
                     {% for entity in trip_entities %}
                         {% if entity["starts_at"] == date %}
                             <div class="panel-heading">
-                                <h3>{{ entity["starts_at"] }}<a style="float:right" id="add-event" data-toggle="modal" data-target="#event-modal">+ Add Event</a></h3>
+                                <h3>{{ entity["starts_at"] }}</h3>
                             </div>
                             {% if entity["flight_id"] %}
                                 <div class="panel-body">

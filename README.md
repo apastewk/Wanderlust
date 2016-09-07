@@ -1,3 +1,4 @@
+<p>Wanderlust</p>
 
 <p><strong>Description</strong></p>
 
@@ -9,7 +10,7 @@
 
 <p>Another API that is used is Flickrs API. Everytime a user goes to their itinerary page, an ajax call is made to Flickrs API. Flickr then gathers images for a particular destination and returns the image to the Wanderlust in JSON. The URL is then reconstructed using pieces of information from the JSON and then using jquery, the image is immediately displayed.</p>
 
-</path></svg></a>Technology Stack</h3>
+<h3>Technology Stack</h3>
 
 <p><strong>Application:</strong> Python, Flask, Jinja, SQLAlchemy, Ngrok, PostgreSQL<br>
 <strong>APIs:</strong> WorldMates API, FLICKRs API<br>
