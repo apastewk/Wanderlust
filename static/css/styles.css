@@ -17,12 +17,23 @@ body {
     margin-top: -30px;
     margin-right: 10px;
 }
-
 .navbar-text2 {
     color: white;
     font-size: 15px;
     margin-top: -30px;
     margin-right: 35px;
+}
+
+.navbar-text3 {
+    font-size: 15px;
+    margin-top: 0;
+    margin-right: 0;
+}
+
+.navbar-text4 {
+    font-size: 15px;
+    margin-top: 0;
+    margin-right: -100px;
 }
 
 .modal-body {
@@ -37,6 +48,9 @@ body {
 #details {
     height: 715px;
     background-color: black !important;
+    margin-top: -20px;
+    margin-bottom: 0;
+
 }
 
 #banner {
